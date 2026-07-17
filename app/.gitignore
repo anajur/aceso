@@ -1,0 +1,98 @@
+# Dependencies
+node_modules/
+.npm
+npm-debug.log*
+# Build
+dist/
+dist-ssr/
+build/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.vscode-test/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+.DS_*
+
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+.npm
+.pnpm-debug.log*
+*.tsbuildinfo
+
+# Yarn
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+.yarn-integrity
+.pnp.*
+
+# Misc
+*.local
+*.tgz
+report.*.json
+pids/
+*.pid
+*.pid.lock
+*.seed
+
+# Backup files
+**/*.backup.*
+**/*.back.*
+*.sublime*
+
+# Optional package managers
+bower_components/
+jspm_packages/
+web_modules/
+
+# Frameworks
+.next/
+.nuxt/
+.svelte-kit/
+out/
+.serverless/
+.webpack/
+.docusaurus/
+.temp/
+.fusebox/
+.dynamodb/
+.tern-port
+
+# Images/Design
+*.psd
+*.sketch
+*.thumb
