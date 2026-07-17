@@ -1,4 +1,4 @@
-package com.tcc.aceso.controller;
+package com.tcc.aceso.api.controller;
 
 import java.util.List;
 
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tcc.aceso.domain.Paciente;
-import com.tcc.aceso.repository.PacienteRepository;
+import com.tcc.aceso.api.domain.Paciente;
+import com.tcc.aceso.api.repository.PacienteRepository;
 
 @RestController
 @RequestMapping("/api/pacientes")

@@ -1,4 +1,4 @@
-package com.tcc.aceso.config;
+package com.tcc.aceso.api.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

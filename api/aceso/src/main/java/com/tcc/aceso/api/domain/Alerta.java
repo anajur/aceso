@@ -1,4 +1,4 @@
-package com.tcc.aceso.domain;
+package com.tcc.aceso.api.domain;
 
 import java.time.LocalDateTime;
 

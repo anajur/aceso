@@ -1,4 +1,4 @@
-package com.tcc.aceso.domain;
+package com.tcc.aceso.api.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,7 +18,7 @@ public class Usuario {
     @Column(nullable = false)
     private String nome;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private String coren;
 
     @Column(nullable = false, unique = true)

@@ -1,4 +1,4 @@
-package com.tcc.aceso.controller;
+package com.tcc.aceso.api.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tcc.aceso.domain.Alerta;
-import com.tcc.aceso.repository.AlertaRepository;
-import com.tcc.aceso.repository.PacienteRepository;
+import com.tcc.aceso.api.domain.Alerta;
+import com.tcc.aceso.api.repository.AlertaRepository;
+import com.tcc.aceso.api.repository.PacienteRepository;
 
 @RestController
 @RequestMapping("/api")

@@ -1,8 +1,10 @@
-package com.tcc.aceso.controller;
+package com.tcc.aceso.api.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.tcc.aceso.api.controller.response.EvolucaoResponse;
+import com.tcc.aceso.api.service.evolucao.EvolucaoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tcc.aceso.domain.Evolucao;
-import com.tcc.aceso.repository.EvolucaoRepository;
-import com.tcc.aceso.repository.PacienteRepository;
+import com.tcc.aceso.api.domain.Evolucao;
+import com.tcc.aceso.api.repository.EvolucaoRepository;
+import com.tcc.aceso.api.repository.PacienteRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -24,15 +26,17 @@ public class EvolucaoController {
 
     private final EvolucaoRepository evolucaoRepository;
     private final PacienteRepository pacienteRepository;
+    private final EvolucaoService evolucaoService;
 
-    public EvolucaoController(EvolucaoRepository evolucaoRepository, PacienteRepository pacienteRepository) {
+    public EvolucaoController(EvolucaoRepository evolucaoRepository, PacienteRepository pacienteRepository, EvolucaoService evolucaoService) {
         this.evolucaoRepository = evolucaoRepository;
         this.pacienteRepository = pacienteRepository;
+        this.evolucaoService = evolucaoService;
     }
 
     @GetMapping("/evolucoes")
-    public List<Evolucao> listarTodas() {
-        return evolucaoRepository.findAll();
+    public List<EvolucaoResponse> listarTodas() {
+        return evolucaoService.listar();
     }
 
     @GetMapping("/pacientes/{pacienteId}/evolucoes")
@@ -82,8 +86,8 @@ public class EvolucaoController {
 
     private void copiarCampos(Evolucao origem, Evolucao destino) {
         destino.setDataHora(origem.getDataHora());
-        destino.setHumor(origem.getHumor());
-        destino.setComportamento(origem.getComportamento());
+        destino.setHumores(origem.getHumores());
+        destino.setComportamentos(origem.getComportamentos());
         destino.setSocializacao(origem.getSocializacao());
         destino.setNivelConsciencia(origem.getNivelConsciencia());
         destino.setSono(origem.getSono());

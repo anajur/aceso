@@ -1,10 +1,10 @@
-package com.tcc.aceso.repository;
+package com.tcc.aceso.api.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.tcc.aceso.domain.Usuario;
+import com.tcc.aceso.api.domain.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 

@@ -1,4 +1,4 @@
-package com.tcc.aceso.domain;
+package com.tcc.aceso.api.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

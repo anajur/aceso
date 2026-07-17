@@ -1,4 +1,4 @@
-package com.tcc.aceso.controller;
+package com.tcc.aceso.api.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tcc.aceso.domain.Usuario;
-import com.tcc.aceso.repository.UsuarioRepository;
+import com.tcc.aceso.api.domain.Usuario;
+import com.tcc.aceso.api.repository.UsuarioRepository;
 
 @RestController
 @RequestMapping("/api/auth")

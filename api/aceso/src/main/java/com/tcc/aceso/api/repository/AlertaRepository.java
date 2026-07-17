@@ -1,10 +1,10 @@
-package com.tcc.aceso.repository;
+package com.tcc.aceso.api.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.tcc.aceso.domain.Alerta;
+import com.tcc.aceso.api.domain.Alerta;
 
 public interface AlertaRepository extends JpaRepository<Alerta, Long> {
 
