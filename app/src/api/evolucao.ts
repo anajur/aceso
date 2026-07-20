@@ -1,29 +1,16 @@
-import { Evolucao } from "../ui/mockadata";
+import { Evolucao, EvolucaoForm } from "../types/evolucao";
 import api from "./axios";
 
-export const listarEvolucoes = async (): Promise<Evolucao[]> => {
-  const { data } = await api.get("/evolucoes");
-  return data;
-};
+const BASE_URL = "/evolucoes";
 
-export const buscarEvolucaoPorId = async (id: number): Promise<Evolucao> => {
-  const { data } = await api.get(`/evolucoes/${id}`);
-  return data;
-};
+function listarEvolucoes() {
+  return api.get(BASE_URL);
+}
 
-export const cadastrarEvolucao = async (evolucao: Evolucao) => {
-  const { data } = await api.post("/evolucoes", evolucao);
-  return data;
-};
+function salvarEvolucao(evolucao: EvolucaoForm) {
+  const { pacienteId, ...body } = evolucao;
 
-export const atualizarEvolucao = async (
-  id: number,
-  evolucao: Evolucao
-) => {
-  const { data } = await api.put(`/evolucoes/${id}`, evolucao);
-  return data;
-};
+  return api.post(`/pacientes/${pacienteId}${BASE_URL}`, body);
+}
 
-export const excluirEvolucao = async (id: number) => {
-  await api.delete(`/evolucoes/${id}`);
-};
+export { listarEvolucoes, salvarEvolucao };

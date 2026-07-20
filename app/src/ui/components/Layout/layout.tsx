@@ -1,21 +1,46 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  AppBar, Toolbar, Drawer, Box, List, ListItem, ListItemButton,
-  ListItemIcon, ListItemText, IconButton, Typography, Avatar, Badge,
+  AppBar,
+  Toolbar,
+  Drawer,
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  IconButton,
+  Typography,
+  Avatar,
+  Badge,
 } from "@mui/material";
 import {
-  People, Description, PersonAdd, AdminPanelSettings, LocalHospital,
-  Assignment, BarChart, Notifications, Download, Menu as MenuIcon, Favorite,
+  People,
+  Description,
+  PersonAdd,
+  AdminPanelSettings,
+  LocalHospital,
+  Assignment,
+  BarChart,
+  Notifications,
+  Download,
+  Menu as MenuIcon,
+  Favorite,
 } from "@mui/icons-material";
 
 const drawerWidth = 260;
 
 const menuItems = [
   { label: "Evoluções", icon: <Assignment />, path: "/evolucoes" },
-  { label: "Pacientes", icon: <People />, path: "/" },
+  {
+    label: "Cadastrar Evolução",
+    icon: <Description />,
+    path: "/evolucoes/nova",
+  },
+
+  { label: "Pacientes", icon: <People />, path: "/pacientes" },
   { label: "Cadastrar Paciente", icon: <PersonAdd />, path: "/pacientes/novo" },
-  { label: "Cadastrar Evolução", icon: <Description />, path: "/evolucoes/nova" },
   { label: "Técnicos", icon: <LocalHospital />, path: "/tecnicos" },
   { label: "Cadastrar Técnico", icon: <PersonAdd />, path: "/tecnicos/novo" },
   { label: "Resumo Paciente", icon: <BarChart />, path: "/resumo" },
@@ -31,12 +56,25 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   const drawer = (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <Box sx={{ px: 2.5, py: 2.5, display: "flex", alignItems: "center", gap: 1.5, borderBottom: "1px solid", borderColor: "divider" }}>
+      <Box
+        sx={{
+          px: 2.5,
+          py: 2.5,
+          display: "flex",
+          alignItems: "center",
+          gap: 1.5,
+          borderBottom: "1px solid",
+          borderColor: "divider",
+        }}
+      >
         <Avatar sx={{ bgcolor: "primary.main", width: 36, height: 36 }}>
           <Favorite fontSize="small" />
         </Avatar>
         <Box>
-          <Typography variant="subtitle1" sx={{ fontWeight: 600, lineHeight: 1.2 }}>
+          <Typography
+            variant="subtitle1"
+            sx={{ fontWeight: 600, lineHeight: 1.2 }}
+          >
             ACESO
           </Typography>
         </Box>
@@ -65,7 +103,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </ListItemIcon>
                 <ListItemText
                   primary={item.label}
-                  primaryTypographyProps={{ fontSize: 14, fontWeight: active ? 600 : 500 }}
+                  primaryTypographyProps={{
+                    fontSize: 14,
+                    fontWeight: active ? 600 : 500,
+                  }}
                 />
               </ListItemButton>
             </ListItem>
@@ -99,13 +140,24 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <Notifications />
             </Badge>
           </IconButton>
-          <Avatar sx={{ ml: 1.5, width: 32, height: 32, bgcolor: "primary.main", fontSize: 13 }}>
+          <Avatar
+            sx={{
+              ml: 1.5,
+              width: 32,
+              height: 32,
+              bgcolor: "primary.main",
+              fontSize: 13,
+            }}
+          >
             AD
           </Avatar>
         </Toolbar>
       </AppBar>
 
-      <Box component="nav" sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
+      <Box
+        component="nav"
+        sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+      >
         <Drawer
           variant="temporary"
           open={open}
@@ -113,7 +165,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: "block", md: "none" },
-            "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
           }}
         >
           {drawer}
@@ -123,7 +178,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           open
           sx={{
             display: { xs: "none", md: "block" },
-            "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
           }}
         >
           {drawer}
@@ -142,9 +200,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           pb: { xs: 3, md: 4 },
         }}
       >
-        <Box sx={{  width: "100%" }}>
-          {children}
-        </Box>
+        <Box sx={{ width: "100%" }}>{children}</Box>
       </Box>
     </Box>
   );

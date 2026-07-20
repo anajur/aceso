@@ -2,6 +2,8 @@ package com.tcc.aceso.api.controller;
 
 import java.util.List;
 
+import com.tcc.aceso.api.controller.response.PacienteListaResponse;
+import com.tcc.aceso.api.service.evolucao.PacienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,14 +23,16 @@ import com.tcc.aceso.api.repository.PacienteRepository;
 public class PacienteController {
 
     private final PacienteRepository pacienteRepository;
+    private final PacienteService pacienteService;
 
-    public PacienteController(PacienteRepository pacienteRepository) {
+    public PacienteController(PacienteRepository pacienteRepository, PacienteService pacienteService) {
         this.pacienteRepository = pacienteRepository;
+        this.pacienteService = pacienteService;
     }
 
     @GetMapping
-    public List<Paciente> listar() {
-        return pacienteRepository.findAll();
+    public List<PacienteListaResponse> listar() {
+        return pacienteService.listar();
     }
 
     @GetMapping("/{id}")

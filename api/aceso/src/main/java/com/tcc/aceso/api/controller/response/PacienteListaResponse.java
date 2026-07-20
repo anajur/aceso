@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PacienteResumoResponse {
+public class PacienteListaResponse {
 
     private Long id;
     private String nome;
+    private boolean possuiEvolucaoHoje;
 }

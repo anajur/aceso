@@ -9,7 +9,11 @@ import { Toaster as Sonner } from "sonner";
 import { GlobalStyle } from "./ui/styles/global";
 import theme from "./theme";
 import { Layout } from "./ui/components/index";
-import { ListaEvolucoes, CadastroEvolucao } from "./ui/screens/index";
+import {
+  ListaEvolucoes,
+  CadastroEvolucao,
+  ListaPacientes,
+} from "./ui/screens/index";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +46,14 @@ const App = () => (
             element={
               <Layout>
                 <CadastroEvolucao />
+              </Layout>
+            }
+          />
+          <Route
+            path="/pacientes"
+            element={
+              <Layout>
+                <ListaPacientes />
               </Layout>
             }
           />

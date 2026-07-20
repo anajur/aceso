@@ -23,7 +23,8 @@ import {
 } from "../../../enums/index";
 import { Evolucao } from "../../../types/evolucao";
 import { listarEvolucoes } from "../../../api/evolucao";
-import { pacientes } from "../../mockadata";
+import { listarPacientes } from "../../../api/paciente";
+import { Paciente } from "../../../types/paciente";
 const humorColor: Record<
   string,
   "success" | "info" | "secondary" | "warning" | "error"
@@ -37,9 +38,10 @@ const humorColor: Record<
 
 export default function ListaEvolucoes() {
   const [searchParams] = useSearchParams();
-
+  const [pacientes, setPacientes] = useState<Paciente[]>([]);
   const [filtro, setFiltro] = useState(searchParams.get("paciente") || "all");
   const navigate = useNavigate();
+
   const handleNovaEvolucao = () => {
     if (filtro === "all") {
       navigate("/");
@@ -50,13 +52,13 @@ export default function ListaEvolucoes() {
   const [dataFiltro, setDataFiltro] = useState("");
 
   const [evolucoes, setEvolucoes] = useState<Evolucao[]>([]);
+
   useEffect(() => {
     carregarEvolucoes();
   }, []);
 
-  const filtradas = evolucoes.filter((e) => {
-    const pacienteValido =
-      filtro === "all" || e.pacienteId.toString() === filtro;
+  const filtradas = evolucoes?.filter((e) => {
+    const pacienteValido = filtro === "all" || e.pacienteId === Number(filtro);
 
     const dataValida =
       !dataFiltro ||
@@ -66,13 +68,16 @@ export default function ListaEvolucoes() {
 
   const carregarEvolucoes = async () => {
     try {
-      const data = await listarEvolucoes();
+      const { data } = await listarEvolucoes();
       setEvolucoes(data);
+      const { data: dataPacientes } = await listarPacientes();
+
+      setPacientes(dataPacientes);
     } catch (error) {
       console.error("Erro ao carregar evoluções:", error);
     }
   };
-  
+
   return (
     <Box sx={{ width: "100%" }}>
       <Stack
