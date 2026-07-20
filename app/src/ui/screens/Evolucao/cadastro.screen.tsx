@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Typography,
@@ -9,8 +9,10 @@ import {
   Grid,
   Divider,
   FormHelperText,
+  Chip,
+  Box,
 } from "@mui/material";
-import { Save, ArrowBack } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
 import { toast } from "sonner";
 import {
   Container,
@@ -19,23 +21,29 @@ import {
   SectionLabel,
   ButtonRow,
 } from "./cadastro.styles";
-import { pacientes } from "../../mockadata";
 import {
   aceitacaoAlimentarLabels,
+  Comportamento,
   comportamentoLabels,
+  Humor,
   humorLabels,
   nivelConscienciaLabels,
   socializacaoLabels,
   sonoLabels,
 } from "../../../enums";
+import { Controller, useForm } from "react-hook-form";
+import { EvolucaoForm } from "../../../types/evolucao";
+import { salvarEvolucao } from "../../../api/evolucao";
+import { Paciente } from "../../../types/paciente";
+import { listarPacientes } from "../../../api/paciente";
+import { useAuth } from "../../../hooks/useAuth";
 
 export default function CadastroEvolucao() {
-  const navigate = useNavigate();
+  const [pacientes, setPacientes] = useState<Paciente[]>([]);
   const [searchParams] = useSearchParams();
   const pacientePre = searchParams.get("paciente") || "";
-
-  const [paciente, setPaciente] = useState(pacientePre);
-  const [pacienteErro, setPacienteErro] = useState(false);
+  const { usuarioId } = useAuth();
+  const navigate = useNavigate();
 
   const nowLocal = () => {
     const d = new Date();
@@ -43,17 +51,83 @@ export default function CadastroEvolucao() {
     return d.toISOString().slice(0, 16);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!paciente) {
-      setPacienteErro(true);
-      toast.error("Selecione um paciente para registrar a evolução.");
-      return;
+  const onSubmit = async (data: EvolucaoForm) => {
+    try {
+      console.log("x", usuarioId);
+      if (!usuarioId) return;
+      await salvarEvolucao({ ...data, usuarioId: usuarioId });
+
+      toast.success("Evolução registrada com sucesso!");
+
+      navigate("/evolucoes");
+    } catch (error) {
+      toast.error("Erro ao registrar evolução.");
+      console.error(error);
     }
-    setPacienteErro(false);
-    toast.success("Evolução registrada com sucesso!");
-    navigate("/evolucoes");
   };
+
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<EvolucaoForm>({
+    defaultValues: {
+      pacienteId: Number(pacientePre),
+      dataHora: nowLocal(),
+      comentario: undefined,
+      humores: [],
+      comportamentos: [],
+      socializacao: undefined,
+      nivelConsciencia: undefined,
+      sono: undefined,
+      aceitacaoAlimentar: undefined,
+      temperatura: undefined,
+      frequenciaCardiaca: undefined,
+    },
+  });
+
+  async function onSubmitAndClear(data: EvolucaoForm) {
+    try {
+      if (!usuarioId) return;
+      await salvarEvolucao({ ...data, usuarioId: usuarioId });
+
+      toast.success("Evolução registrada com sucesso!");
+
+      reset({
+        pacienteId: pacientePre ? Number(pacientePre) : undefined,
+        dataHora: nowLocal(),
+        comentario: undefined,
+        humores: [],
+        comportamentos: [],
+        socializacao: undefined,
+        nivelConsciencia: undefined,
+        sono: undefined,
+        aceitacaoAlimentar: undefined,
+        temperatura: undefined,
+        frequenciaCardiaca: undefined,
+      });
+    } catch (error) {
+      toast.error("Erro ao registrar evolução.");
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    async function buscarPacientes() {
+      try {
+        const { data } = await listarPacientes();
+
+        setPacientes(data);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        toast.error("Erro ao carregar pacientes.");
+      }
+    }
+
+    buscarPacientes();
+  }, []);
 
   return (
     <Container>
@@ -72,30 +146,34 @@ export default function CadastroEvolucao() {
       </HeaderRow>
 
       <FormCard>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <SectionLabel>Identificação</SectionLabel>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={7}>
-              <TextField
-                label="Paciente"
-                select
-                required
-                value={paciente}
-                onChange={(e) => {
-                  setPaciente(e.target.value);
-                  if (e.target.value) setPacienteErro(false);
-                }}
-                error={pacienteErro}
-                fullWidth
-              >
-                <MenuItem value="">Selecione…</MenuItem>
-                {pacientes.map((p) => (
-                  <MenuItem key={p.id} value={p.id}>
-                    {p.nome} — Leito {p.leito}
-                  </MenuItem>
-                ))}
-              </TextField>
-              {pacienteErro && (
+              <Controller
+                name="pacienteId"
+                control={control}
+                rules={{ required: "Selecione um paciente." }}
+                render={({ field, fieldState }) => (
+                  <TextField
+                    {...field}
+                    label="Paciente"
+                    select
+                    fullWidth
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                  >
+                    <MenuItem value="">Selecione...</MenuItem>
+
+                    {pacientes?.map((p) => (
+                      <MenuItem key={p.id} value={p.id}>
+                        {p.nome}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+              {errors.pacienteId && (
                 <FormHelperText error>Selecione um paciente.</FormHelperText>
               )}
             </Grid>
@@ -103,9 +181,9 @@ export default function CadastroEvolucao() {
               <TextField
                 label="Data e Hora"
                 type="datetime-local"
-                defaultValue={nowLocal()}
-                InputLabelProps={{ shrink: true }}
                 fullWidth
+                InputLabelProps={{ shrink: true }}
+                {...register("dataHora")}
               />
             </Grid>
 
@@ -115,6 +193,9 @@ export default function CadastroEvolucao() {
                 multiline
                 rows={4}
                 fullWidth
+                {...register("comentario", {
+                  required: "Informe a evolução.",
+                })}
               />
             </Grid>
           </Grid>
@@ -122,28 +203,14 @@ export default function CadastroEvolucao() {
           <Divider style={{ margin: "24px 0" }} />
           <SectionLabel>Avaliação Psicossocial</SectionLabel>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={4}>
-              <TextField label="Humor" select defaultValue="" fullWidth>
-                <MenuItem value="">—</MenuItem>
-                {Object.entries(humorLabels).map(([k, l]) => (
-                  <MenuItem key={k} value={k}>
-                    {l}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField label="Comportamento" select defaultValue="" fullWidth>
-                <MenuItem value="">—</MenuItem>
-                {Object.entries(comportamentoLabels).map(([k, l]) => (
-                  <MenuItem key={k} value={k}>
-                    {l}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField label="Socialização" select defaultValue="" fullWidth>
+            <Grid item xs={3} md={6}>
+              <TextField
+                label="Socialização"
+                select
+                defaultValue=""
+                fullWidth
+                {...register("socializacao")}
+              >
                 <MenuItem value="">—</MenuItem>
                 {Object.entries(socializacaoLabels).map(([k, l]) => (
                   <MenuItem key={k} value={k}>
@@ -151,6 +218,98 @@ export default function CadastroEvolucao() {
                   </MenuItem>
                 ))}
               </TextField>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Controller
+                name="humores"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    label="Humor"
+                    select
+                    fullWidth
+                    value={field.value}
+                    onChange={(e) =>
+                      field.onChange(
+                        typeof e.target.value === "string"
+                          ? e.target.value.split(",")
+                          : e.target.value,
+                      )
+                    }
+                    slotProps={{
+                      select: {
+                        multiple: true,
+                        renderValue: (selected) => (
+                          <Box
+                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                          >
+                            {(selected as Humor[]).map((humor) => (
+                              <Chip
+                                key={humor}
+                                label={humorLabels[humor]}
+                                size="small"
+                              />
+                            ))}
+                          </Box>
+                        ),
+                      },
+                    }}
+                  >
+                    {Object.entries(humorLabels).map(([key, label]) => (
+                      <MenuItem key={key} value={key}>
+                        {label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <Controller
+                name="comportamentos"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    label="Comportamentos"
+                    select
+                    fullWidth
+                    value={field.value}
+                    onChange={(e) =>
+                      field.onChange(
+                        typeof e.target.value === "string"
+                          ? e.target.value.split(",")
+                          : e.target.value,
+                      )
+                    }
+                    slotProps={{
+                      select: {
+                        multiple: true,
+                        renderValue: (selected) => (
+                          <Box
+                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                          >
+                            {(selected as Comportamento[]).map(
+                              (comportamento) => (
+                                <Chip
+                                  key={comportamento}
+                                  label={comportamentoLabels[comportamento]}
+                                  size="small"
+                                />
+                              ),
+                            )}
+                          </Box>
+                        ),
+                      },
+                    }}
+                  >
+                    {Object.entries(comportamentoLabels).map(([key, label]) => (
+                      <MenuItem key={key} value={key}>
+                        {label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
             </Grid>
           </Grid>
 
@@ -163,6 +322,7 @@ export default function CadastroEvolucao() {
                 select
                 defaultValue=""
                 fullWidth
+                {...register("nivelConsciencia")}
               >
                 <MenuItem value="">—</MenuItem>
                 {Object.entries(nivelConscienciaLabels).map(([k, l]) => (
@@ -173,7 +333,13 @@ export default function CadastroEvolucao() {
               </TextField>
             </Grid>
             <Grid item xs={12} sm={4}>
-              <TextField label="Sono" select defaultValue="" fullWidth>
+              <TextField
+                label="Sono"
+                select
+                defaultValue=""
+                fullWidth
+                {...register("sono")}
+              >
                 <MenuItem value="">—</MenuItem>
                 {Object.entries(sonoLabels).map(([k, l]) => (
                   <MenuItem key={k} value={k}>
@@ -185,6 +351,7 @@ export default function CadastroEvolucao() {
             <Grid item xs={12} sm={4}>
               <TextField
                 label="Aceitação Alimentar"
+                {...register("aceitacaoAlimentar")}
                 select
                 defaultValue=""
                 fullWidth
@@ -199,30 +366,37 @@ export default function CadastroEvolucao() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Temperatura (°C)"
+                label="Temperatura"
                 type="number"
-                inputProps={{ step: 0.1, min: 30, max: 45 }}
-                placeholder="Ex: 36.5"
                 fullWidth
+                {...register("temperatura", {
+                  valueAsNumber: true,
+                })}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Frequência Cardíaca (bpm)"
+                label="Frequência Cardíaca"
                 type="number"
-                inputProps={{ step: 1, min: 20, max: 250 }}
-                placeholder="Ex: 78"
                 fullWidth
+                {...register("frequenciaCardiaca", {
+                  valueAsNumber: true,
+                })}
               />
             </Grid>
           </Grid>
 
           <ButtonRow>
-            <Button variant="outlined" onClick={() => navigate(-1)}>
-              Cancelar
+            <Button
+              type="button"
+              variant="contained"
+              color="secondary"
+              onClick={handleSubmit(onSubmitAndClear)}
+            >
+              Salvar
             </Button>
-            <Button type="submit" variant="contained" startIcon={<Save />}>
-              Registrar Evolução
+            <Button type="submit" variant="contained">
+              Salvar e Voltar
             </Button>
           </ButtonRow>
         </form>

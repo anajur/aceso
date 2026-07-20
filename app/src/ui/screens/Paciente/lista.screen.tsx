@@ -1,0 +1,155 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  Typography,
+  Button,
+  InputAdornment,
+  Stack,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import {
+  Search,
+  Add,
+  Description,
+  BarChart,
+  AddCircle,
+} from "@mui/icons-material";
+import {
+  Container,
+  Header,
+  Actions,
+  SearchField,
+  PacienteCard,
+  CardRow,
+  InfoRow,
+  PacienteAvatar,
+  CardActions,
+  EvolucaoStatus,
+} from "./lista.styles";
+import { Paciente } from "../../../types/paciente";
+import { listarPacientes } from "../../../api/paciente";
+
+export default function ListaPacientes() {
+  const [busca, setBusca] = useState("");
+  const [pacientes, setPacientes] = useState<Paciente[]>([]);
+
+  const filtrados = pacientes.filter((p) =>
+    p.nome.toLowerCase().includes(busca.toLowerCase()),
+  );
+
+  async function carregarPacientes() {
+    try {
+      const { data: dataPacientes } = await listarPacientes();
+
+      setPacientes(dataPacientes);
+    } catch (error) {
+      console.error("Erro ao carregar pacientes:", error);
+    }
+  }
+
+  useEffect(() => {
+    carregarPacientes();
+  }, []);
+
+  return (
+    <Container>
+      <Header>
+        <div>
+          <Typography variant="h5" style={{ fontWeight: 600 }}>
+            Pacientes
+          </Typography>
+        </div>
+        <Actions>
+          <Button
+            component={Link}
+            to="/evolucoes/nova"
+            variant="outlined"
+            startIcon={<AddCircle />}
+          >
+            Nova Evolução
+          </Button>
+          <Button
+            component={Link}
+            to="/pacientes/novo"
+            variant="contained"
+            startIcon={<Add />}
+          >
+            Novo Paciente
+          </Button>
+        </Actions>
+      </Header>
+
+      <SearchField
+        placeholder="Buscar paciente..."
+        value={busca}
+        onChange={(e) => setBusca(e.target.value)}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Search fontSize="small" />
+            </InputAdornment>
+          ),
+        }}
+      />
+
+      <Stack spacing={1.5}>
+        {filtrados.map((p) => {
+          const done = p.possuiEvolucaoHoje;
+          return (
+            <PacienteCard key={p.id}>
+              <CardRow>
+                <InfoRow>
+                  <PacienteAvatar>
+                    {p.nome
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </PacienteAvatar>
+                  <div>
+                    <Typography style={{ fontWeight: 600 }}>
+                      {p.nome}
+                    </Typography>
+                  </div>
+                </InfoRow>
+                <CardActions>
+                  <EvolucaoStatus $done={done}>
+                    {done ? "Evolução do dia registrada" : "Evolução pendente"}
+                  </EvolucaoStatus>
+                  <Tooltip title="Registrar evolução">
+                    <IconButton
+                      component={Link}
+                      to={`/evolucoes/nova?paciente=${p.id}`}
+                      color="primary"
+                      size="small"
+                    >
+                      <AddCircle />
+                    </IconButton>
+                  </Tooltip>
+                  <Button
+                    component={Link}
+                    to={`/evolucoes?paciente=${p.id}`}
+                    size="small"
+                    startIcon={<Description />}
+                    color="inherit"
+                  >
+                    Evoluções
+                  </Button>
+                  <Button
+                    component={Link}
+                    to={`/resumo?paciente=${p.id}`}
+                    size="small"
+                    startIcon={<BarChart />}
+                    color="inherit"
+                  >
+                    Resumo
+                  </Button>
+                </CardActions>
+              </CardRow>
+            </PacienteCard>
+          );
+        })}
+      </Stack>
+    </Container>
+  );
+}

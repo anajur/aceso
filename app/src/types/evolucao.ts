@@ -27,12 +27,13 @@ export interface Evolucao {
 
 export interface EvolucaoForm {
   pacienteId: number;
+  usuarioId: number;
   dataHora: string;
   comentario: string;
   humores: Humor[];
   comportamentos: Comportamento[];
   socializacao: Socializacao;
-  nivelConsciencia: NivelConsciencia;
+  nivelConsciencia?: NivelConsciencia;
   sono: Sono;
   aceitacaoAlimentar: AceitacaoAlimentar;
   temperatura?: number;

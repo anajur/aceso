@@ -27,7 +27,9 @@ import {
   Download,
   Menu as MenuIcon,
   Favorite,
+  Logout,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 260;
 
@@ -40,20 +42,28 @@ const menuItems = [
   },
 
   { label: "Pacientes", icon: <People />, path: "/pacientes" },
-  { label: "Cadastrar Paciente", icon: <PersonAdd />, path: "/pacientes/novo" },
-  { label: "Técnicos", icon: <LocalHospital />, path: "/tecnicos" },
-  { label: "Cadastrar Técnico", icon: <PersonAdd />, path: "/tecnicos/novo" },
-  { label: "Resumo Paciente", icon: <BarChart />, path: "/resumo" },
   { label: "Alertas", icon: <Notifications />, path: "/alertas" },
-  { label: "Exportar", icon: <Download />, path: "/exportar" },
-  { label: "Perfil ADM", icon: <AdminPanelSettings />, path: "/perfil-adm" },
-  { label: "Perfil Técnico", icon: <LocalHospital />, path: "/perfil-tecnico" },
+
+  // { label: "Cadastrar Paciente", icon: <PersonAdd />, path: "/pacientes/novo" },
+  // { label: "Técnicos", icon: <LocalHospital />, path: "/tecnicos" },
+  // { label: "Cadastrar Técnico", icon: <PersonAdd />, path: "/tecnicos/novo" },
+  // { label: "Resumo Paciente", icon: <BarChart />, path: "/resumo" },
+  // { label: "Exportar", icon: <Download />, path: "/exportar" },
+  // { label: "Perfil ADM", icon: <AdminPanelSettings />, path: "/perfil-adm" },
+  // { label: "Perfil Técnico", icon: <LocalHospital />, path: "/perfil-tecnico" },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+
+    navigate("/login");
+  }
   const drawer = (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Box
@@ -113,6 +123,37 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           );
         })}
       </List>
+      <Box
+        sx={{
+          borderTop: "1px solid",
+          borderColor: "divider",
+          p: 1,
+        }}
+      >
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={handleLogout}
+            sx={{
+              color: "error.main",
+              borderRadius: 2,
+              "&:hover": {
+                bgcolor: "error.lighter",
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: "error.main", minWidth: 36 }}>
+              <Logout />
+            </ListItemIcon>
+
+            <ListItemText
+              primary="Sair"
+              primaryTypographyProps={{
+                fontWeight: 600,
+              }}
+            />
+          </ListItemButton>
+        </ListItem>
+      </Box>
     </Box>
   );
 

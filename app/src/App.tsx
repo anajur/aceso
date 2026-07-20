@@ -13,52 +13,57 @@ import {
   ListaEvolucoes,
   CadastroEvolucao,
   ListaPacientes,
+  Login,
 } from "./ui/screens/index";
+import { AuthProvider } from "./context/AuthProvider";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <GlobalStyle />
-      <Sonner position="top-right" />
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Layout>
-                <ListaEvolucoes />
-              </Layout>
-            }
-          />
-          <Route
-            path="/evolucoes"
-            element={
-              <Layout>
-                <ListaEvolucoes />
-              </Layout>
-            }
-          />
-          <Route
-            path="/evolucoes/nova"
-            element={
-              <Layout>
-                <CadastroEvolucao />
-              </Layout>
-            }
-          />
-          <Route
-            path="/pacientes"
-            element={
-              <Layout>
-                <ListaPacientes />
-              </Layout>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <CssBaseline />
+        <GlobalStyle />
+        <Sonner position="top-right" />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <Layout>
+                  <ListaEvolucoes />
+                </Layout>
+              }
+            />
+            <Route
+              path="/evolucoes"
+              element={
+                <Layout>
+                  <ListaEvolucoes />
+                </Layout>
+              }
+            />
+            <Route
+              path="/evolucoes/nova"
+              element={
+                <Layout>
+                  <CadastroEvolucao />
+                </Layout>
+              }
+            />
+            <Route
+              path="/pacientes"
+              element={
+                <Layout>
+                  <ListaPacientes />
+                </Layout>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   </QueryClientProvider>
 );

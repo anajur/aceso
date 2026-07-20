@@ -1,4 +1,4 @@
-import { Evolucao, EvolucaoForm } from "../types/evolucao";
+import { EvolucaoForm } from "../types/evolucao";
 import api from "./axios";
 
 const BASE_URL = "/evolucoes";
