@@ -3,7 +3,7 @@ package com.tcc.aceso.api.controller;
 import java.util.List;
 
 import com.tcc.aceso.api.controller.response.PacienteListaResponse;
-import com.tcc.aceso.api.service.evolucao.PacienteService;
+import com.tcc.aceso.api.service.PacienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

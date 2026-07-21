@@ -40,7 +40,7 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody Usuario usuario) {
-        if (usuario.getLogin() != null && usuarioRepository.existsByLogin(usuario.getLogin())) {
+        if (usuario.getEmail() != null && usuarioRepository.existsByEmail(usuario.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Ja existe um usuario com este login.");
         }
 
@@ -53,7 +53,7 @@ public class UsuarioController {
                 .map(usuario -> {
                     usuario.setNome(dados.getNome());
                     usuario.setCoren(dados.getCoren());
-                    usuario.setLogin(dados.getLogin());
+                    usuario.setEmail(dados.getEmail());
                     usuario.setSenha(dados.getSenha());
                     return ResponseEntity.ok(usuarioRepository.save(usuario));
                 })
@@ -69,4 +69,6 @@ public class UsuarioController {
         usuarioRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+
 }

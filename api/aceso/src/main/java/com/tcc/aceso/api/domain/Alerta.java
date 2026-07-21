@@ -2,19 +2,19 @@ package com.tcc.aceso.api.domain;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.tcc.aceso.api.enums.GrauUrgencia;
+import com.tcc.aceso.api.enums.StatusAlerta;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "alertas")
 public class Alerta {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,74 +23,21 @@ public class Alerta {
     @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String mensagem;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "grau_urgencia", nullable = false)
-    private String grauUrgencia;
-
-    @Column(nullable = false)
-    private String status;
+    private GrauUrgencia grauUrgencia;
 
     @Column(name = "data_alerta", nullable = false)
-    private LocalDateTime dataAlerta = LocalDateTime.now();
+    private LocalDateTime dataAlerta;
 
-    @Column(name = "analisado_pela_ia", nullable = false)
-    private Boolean analisadoPelaIa = false;
+    @Column(name = "ultima_analise_ia", nullable = false)
+    private LocalDateTime ultimaAnaliseIa;
 
-    public Long getId() {
-        return id;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusAlerta status;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Paciente getPaciente() {
-        return paciente;
-    }
-
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
-    }
-
-    public String getMensagem() {
-        return mensagem;
-    }
-
-    public void setMensagem(String mensagem) {
-        this.mensagem = mensagem;
-    }
-
-    public String getGrauUrgencia() {
-        return grauUrgencia;
-    }
-
-    public void setGrauUrgencia(String grauUrgencia) {
-        this.grauUrgencia = grauUrgencia;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getDataAlerta() {
-        return dataAlerta;
-    }
-
-    public void setDataAlerta(LocalDateTime dataAlerta) {
-        this.dataAlerta = dataAlerta;
-    }
-
-    public Boolean getAnalisadoPelaIa() {
-        return analisadoPelaIa;
-    }
-
-    public void setAnalisadoPelaIa(Boolean analisadoPelaIa) {
-        this.analisadoPelaIa = analisadoPelaIa;
-    }
 }

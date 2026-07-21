@@ -52,7 +52,7 @@ public class AlertaController {
     @GetMapping("/alertas")
     public List<Alerta> listar(@RequestParam(required = false) StatusAlerta status) {
         if (status != null) {
-            return alertaRepository.findByStatusIgnoreCaseOrderByDataAlertaDesc(status);
+            return alertaRepository.findByStatusOrderByDataAlertaDesc(status);
         }
 
         return alertaRepository.findAll();

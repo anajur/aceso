@@ -1,10 +1,10 @@
 package com.tcc.aceso.api.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+import com.tcc.aceso.api.controller.request.CadastroEvolucaoRequest;
 import com.tcc.aceso.api.controller.response.EvolucaoResponse;
-import com.tcc.aceso.api.service.evolucao.EvolucaoService;
+import com.tcc.aceso.api.service.EvolucaoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,16 +52,11 @@ public class EvolucaoController {
     }
 
     @PostMapping("/pacientes/{pacienteId}/evolucoes")
-    public ResponseEntity<Evolucao> cadastrar(@PathVariable Long pacienteId, @RequestBody Evolucao evolucao) {
-        return pacienteRepository.findById(pacienteId)
-                .map(paciente -> {
-                    evolucao.setPaciente(paciente);
-                    if (evolucao.getDataHora() == null) {
-                        evolucao.setDataHora(LocalDateTime.now());
-                    }
-                    return ResponseEntity.status(HttpStatus.CREATED).body(evolucaoRepository.save(evolucao));
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<EvolucaoResponse> cadastrar(@PathVariable Long pacienteId, @RequestBody CadastroEvolucaoRequest request) {
+
+        EvolucaoResponse response = evolucaoService.cadastrar(pacienteId, request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/evolucoes/{id}")
