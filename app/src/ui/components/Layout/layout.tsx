@@ -46,7 +46,7 @@ const menuItems = [
 
   // { label: "Cadastrar Paciente", icon: <PersonAdd />, path: "/pacientes/novo" },
   // { label: "Técnicos", icon: <LocalHospital />, path: "/tecnicos" },
-  // { label: "Cadastrar Técnico", icon: <PersonAdd />, path: "/tecnicos/novo" },
+  { label: "Cadastrar Usuário", icon: <PersonAdd />, path: "/usuarios/novo" },
   // { label: "Resumo Paciente", icon: <BarChart />, path: "/resumo" },
   // { label: "Exportar", icon: <Download />, path: "/exportar" },
   // { label: "Perfil ADM", icon: <AdminPanelSettings />, path: "/perfil-adm" },
@@ -177,9 +177,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </IconButton>
           <Box sx={{ flex: 1 }} />
           <IconButton component={Link} to="/alertas" size="small">
-            <Badge badgeContent={3} color="error">
-              <Notifications />
-            </Badge>
+            <Notifications />
           </IconButton>
           <Avatar
             sx={{

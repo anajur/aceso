@@ -15,6 +15,7 @@ import {
   ListaPacientes,
   Login,
   ListaAlertas,
+  CadastroUsuario,
 } from "./ui/screens/index";
 import { AuthProvider } from "./context/AuthProvider";
 
@@ -67,6 +68,14 @@ const App = () => (
               element={
                 <Layout>
                   <ListaAlertas />
+                </Layout>
+              }
+            />
+            <Route
+              path="/usuarios/novo"
+              element={
+                <Layout>
+                  <CadastroUsuario />
                 </Layout>
               }
             />
