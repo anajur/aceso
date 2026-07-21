@@ -27,7 +27,7 @@ import com.tcc.aceso.api.repository.PacienteRepository;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/alertas/")
+@RequestMapping("/api")
 public class AlertaController {
 
     private final AlertaRepository alertaRepository;
@@ -35,7 +35,7 @@ public class AlertaController {
     private final GeminiService geminiService;
     private final AlertaService alertaService;
 
-    @PostMapping("/atualizar")
+    @PostMapping("/alertas/atualizar")
     public ResponseEntity<Void> gerarAlertas() throws JsonProcessingException {
         alertaService.gerarAlertasDoDia();
         return ResponseEntity.ok().build();
@@ -50,12 +50,8 @@ public class AlertaController {
     }
 
     @GetMapping("/alertas")
-    public List<Alerta> listar(@RequestParam(required = false) StatusAlerta status) {
-        if (status != null) {
-            return alertaRepository.findByStatusOrderByDataAlertaDesc(status);
-        }
-
-        return alertaRepository.findAll();
+    public List<Alerta> listar() {
+        return alertaRepository.findAllByOrderByStatusDescDataAlertaDesc();
     }
 
     @GetMapping("/pacientes/{pacienteId}/alertas")

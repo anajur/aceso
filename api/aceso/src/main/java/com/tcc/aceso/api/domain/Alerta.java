@@ -24,7 +24,10 @@ public class Alerta {
     private Paciente paciente;
 
     @Column(nullable = false, length = 1000)
-    private String mensagem;
+    private String resumo;
+
+    @Column(nullable = false, length = 1000)
+    private String sugestao;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "grau_urgencia", nullable = false)

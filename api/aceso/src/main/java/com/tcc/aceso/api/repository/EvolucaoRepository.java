@@ -3,12 +3,14 @@ package com.tcc.aceso.api.repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.tcc.aceso.api.domain.Evolucao;
 
 public interface EvolucaoRepository extends JpaRepository<Evolucao, Long> {
+    Optional<Evolucao> findTopByPacienteIdOrderByDataHoraDesc(Long pacienteId);
 
     List<Evolucao> findByPacienteIdOrderByDataHoraDesc(Long pacienteId);
 

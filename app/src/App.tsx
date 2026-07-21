@@ -14,6 +14,7 @@ import {
   CadastroEvolucao,
   ListaPacientes,
   Login,
+  ListaAlertas,
 } from "./ui/screens/index";
 import { AuthProvider } from "./context/AuthProvider";
 
@@ -58,6 +59,14 @@ const App = () => (
               element={
                 <Layout>
                   <ListaPacientes />
+                </Layout>
+              }
+            />
+            <Route
+              path="/alertas"
+              element={
+                <Layout>
+                  <ListaAlertas />
                 </Layout>
               }
             />

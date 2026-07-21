@@ -15,5 +15,5 @@ public interface AlertaRepository extends JpaRepository<Alerta, Long> {
 
     List<Alerta> findByPacienteIdOrderByDataAlertaDesc(Long pacienteId);
 
-    List<Alerta> findByStatusIgnoreCaseOrderByDataAlertaDesc(StatusAlerta status);
+    List<Alerta> findAllByOrderByStatusDescDataAlertaDesc();
 }
