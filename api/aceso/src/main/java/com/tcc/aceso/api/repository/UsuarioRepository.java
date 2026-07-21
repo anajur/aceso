@@ -8,9 +8,9 @@ import com.tcc.aceso.api.domain.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    Optional<Usuario> findByLogin(String login);
+    Optional<Usuario> findByEmail(String email);
 
-    Optional<Usuario> findByLoginAndSenha(String login, String senha);
+    Optional<Usuario> findByEmailAndSenha(String email, String senha);
 
-    boolean existsByLogin(String login);
+    boolean existsByEmail(String email);
 }

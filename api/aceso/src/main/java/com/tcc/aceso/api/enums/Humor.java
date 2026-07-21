@@ -7,6 +7,7 @@ public enum Humor {
     IRRITADO,
     APATICO,
     EUFORICO,
-    CALMO
+    CALMO,
+    NEUTRO
 
 }

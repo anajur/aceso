@@ -1,4 +1,4 @@
-package com.tcc.aceso.api.service.evolucao;
+package com.tcc.aceso.api.service;
 
 import com.tcc.aceso.api.controller.response.PacienteListaResponse;
 import com.tcc.aceso.api.repository.EvolucaoRepository;

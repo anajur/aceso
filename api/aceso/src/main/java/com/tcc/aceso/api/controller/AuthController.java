@@ -1,5 +1,7 @@
 package com.tcc.aceso.api.controller;
 
+import com.tcc.aceso.api.controller.request.LoginRequest;
+import com.tcc.aceso.api.controller.response.LoginResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,19 +23,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        return usuarioRepository.findByLoginAndSenha(request.login(), request.senha())
-                .<ResponseEntity<?>>map(usuario -> ResponseEntity.ok(toResponse(usuario)))
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login ou senha invalidos."));
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+
+        return usuarioRepository
+                .findByEmailAndSenha(request.getEmail(), request.getSenha())
+                .map(usuario -> ResponseEntity.ok(new LoginResponse(usuario.getId())))
+                .orElse(ResponseEntity.status(401).build());
     }
 
-    private UsuarioResponse toResponse(Usuario usuario) {
-        return new UsuarioResponse(usuario.getId(), usuario.getNome(), usuario.getCoren(), usuario.getLogin());
-    }
 
-    public record LoginRequest(String login, String senha) {
-    }
 
-    public record UsuarioResponse(Long id, String nome, String coren, String login) {
-    }
+
 }

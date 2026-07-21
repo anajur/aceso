@@ -1,7 +1,6 @@
 package com.tcc.aceso.api.controller.response;
 
-import com.tcc.aceso.api.enums.Comportamento;
-import com.tcc.aceso.api.enums.Humor;
+import com.tcc.aceso.api.enums.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,10 +23,10 @@ public class EvolucaoResponse {
     private LocalDateTime dataHora;
     private List<Humor> humores;
     private List<Comportamento> comportamentos;
-    private String socializacao;
-    private String nivelConsciencia;
-    private String sono;
-    private String aceitacaoAlimentar;
+    private Socializacao socializacao;
+    private NivelConsciencia nivelConsciencia;
+    private Sono sono;
+    private AceitacaoAlimentar aceitacaoAlimentar;
     private Double temperatura;
     private Integer frequenciaCardiaca;
     private String comentario;

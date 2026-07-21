@@ -3,6 +3,11 @@ package com.tcc.aceso.api.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.tcc.aceso.api.enums.StatusAlerta;
+import com.tcc.aceso.api.service.AlertaService;
+import com.tcc.aceso.api.service.GeminiService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,21 +25,33 @@ import com.tcc.aceso.api.domain.Alerta;
 import com.tcc.aceso.api.repository.AlertaRepository;
 import com.tcc.aceso.api.repository.PacienteRepository;
 
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/alertas/")
 public class AlertaController {
 
     private final AlertaRepository alertaRepository;
     private final PacienteRepository pacienteRepository;
+    private final GeminiService geminiService;
+    private final AlertaService alertaService;
 
-    public AlertaController(AlertaRepository alertaRepository, PacienteRepository pacienteRepository) {
-        this.alertaRepository = alertaRepository;
-        this.pacienteRepository = pacienteRepository;
+    @PostMapping("/atualizar")
+    public ResponseEntity<Void> gerarAlertas() throws JsonProcessingException {
+        alertaService.gerarAlertasDoDia();
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/alertas/{id}/lido")
+    public ResponseEntity<Void> marcarComoLido(@PathVariable Long id) {
+
+        alertaService.marcarComoLido(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/alertas")
-    public List<Alerta> listar(@RequestParam(required = false) String status) {
-        if (status != null && !status.isBlank()) {
+    public List<Alerta> listar(@RequestParam(required = false) StatusAlerta status) {
+        if (status != null) {
             return alertaRepository.findByStatusIgnoreCaseOrderByDataAlertaDesc(status);
         }
 
@@ -53,42 +70,6 @@ public class AlertaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/pacientes/{pacienteId}/alertas")
-    public ResponseEntity<Alerta> cadastrar(@PathVariable Long pacienteId, @RequestBody Alerta alerta) {
-        return pacienteRepository.findById(pacienteId)
-                .map(paciente -> {
-                    alerta.setPaciente(paciente);
-                    if (alerta.getDataAlerta() == null) {
-                        alerta.setDataAlerta(LocalDateTime.now());
-                    }
-                    if (alerta.getAnalisadoPelaIa() == null) {
-                        alerta.setAnalisadoPelaIa(false);
-                    }
-                    return ResponseEntity.status(HttpStatus.CREATED).body(alertaRepository.save(alerta));
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PutMapping("/alertas/{id}")
-    public ResponseEntity<Alerta> atualizar(@PathVariable Long id, @RequestBody Alerta dados) {
-        return alertaRepository.findById(id)
-                .map(alerta -> {
-                    copiarCampos(dados, alerta);
-                    return ResponseEntity.ok(alertaRepository.save(alerta));
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PatchMapping("/alertas/{id}/resolver")
-    public ResponseEntity<Alerta> resolver(@PathVariable Long id) {
-        return alertaRepository.findById(id)
-                .map(alerta -> {
-                    alerta.setStatus("RESOLVIDO");
-                    return ResponseEntity.ok(alertaRepository.save(alerta));
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @DeleteMapping("/alertas/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
         if (!alertaRepository.existsById(id)) {
@@ -97,13 +78,5 @@ public class AlertaController {
 
         alertaRepository.deleteById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private void copiarCampos(Alerta origem, Alerta destino) {
-        destino.setMensagem(origem.getMensagem());
-        destino.setGrauUrgencia(origem.getGrauUrgencia());
-        destino.setStatus(origem.getStatus());
-        destino.setDataAlerta(origem.getDataAlerta());
-        destino.setAnalisadoPelaIa(origem.getAnalisadoPelaIa());
     }
 }

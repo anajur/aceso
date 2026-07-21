@@ -12,6 +12,8 @@ public interface EvolucaoRepository extends JpaRepository<Evolucao, Long> {
 
     List<Evolucao> findByPacienteIdOrderByDataHoraDesc(Long pacienteId);
 
+    List<Evolucao> findTop2ByPacienteIdOrderByDataHoraDesc(Long pacienteId);
+
     boolean existsByPacienteIdAndDataHoraBetween(
             Long pacienteId,
             LocalDateTime inicio,
