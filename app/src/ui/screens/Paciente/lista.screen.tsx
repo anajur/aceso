@@ -7,6 +7,8 @@ import {
   Stack,
   IconButton,
   Tooltip,
+  CircularProgress,
+  Box,
 } from "@mui/material";
 import {
   Search,
@@ -29,22 +31,28 @@ import {
 } from "./lista.styles";
 import { Paciente } from "../../../types/paciente";
 import { listarPacientes } from "../../../api/paciente";
+import { toast } from "sonner";
 
 export default function ListaPacientes() {
   const [busca, setBusca] = useState("");
   const [pacientes, setPacientes] = useState<Paciente[]>([]);
-
+  const [loading, setLoading] = useState(true);
   const filtrados = pacientes.filter((p) =>
     p.nome.toLowerCase().includes(busca.toLowerCase()),
   );
 
   async function carregarPacientes() {
     try {
+      setLoading(true);
+
       const { data: dataPacientes } = await listarPacientes();
 
       setPacientes(dataPacientes);
     } catch (error) {
-      console.error("Erro ao carregar pacientes:", error);
+      console.log(error);
+      toast.error("Erro ao carregar pacientes:");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -92,64 +100,71 @@ export default function ListaPacientes() {
           ),
         }}
       />
-
-      <Stack spacing={1.5}>
-        {filtrados.map((p) => {
-          const done = p.possuiEvolucaoHoje;
-          return (
-            <PacienteCard key={p.id}>
-              <CardRow>
-                <InfoRow>
-                  <PacienteAvatar>
-                    {p.nome
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </PacienteAvatar>
-                  <div>
-                    <Typography style={{ fontWeight: 600 }}>
-                      {p.nome}
-                    </Typography>
-                  </div>
-                </InfoRow>
-                <CardActions>
-                  <EvolucaoStatus $done={done}>
-                    {done ? "Evolução do dia registrada" : "Evolução pendente"}
-                  </EvolucaoStatus>
-                  <Tooltip title="Registrar evolução">
-                    <IconButton
+      {loading ? (
+        <Box display="flex" justifyContent="center" py={6}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Stack spacing={1.5}>
+          {filtrados.map((p) => {
+            const done = p.possuiEvolucaoHoje;
+            return (
+              <PacienteCard key={p.id}>
+                <CardRow>
+                  <InfoRow>
+                    <PacienteAvatar>
+                      {p.nome
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </PacienteAvatar>
+                    <div>
+                      <Typography style={{ fontWeight: 600 }}>
+                        {p.nome}
+                      </Typography>
+                    </div>
+                  </InfoRow>
+                  <CardActions>
+                    <EvolucaoStatus $done={done}>
+                      {done
+                        ? "Evolução do dia registrada"
+                        : "Evolução pendente"}
+                    </EvolucaoStatus>
+                    <Tooltip title="Registrar evolução">
+                      <IconButton
+                        component={Link}
+                        to={`/evolucoes/nova?paciente=${p.id}`}
+                        color="primary"
+                        size="small"
+                      >
+                        <AddCircle />
+                      </IconButton>
+                    </Tooltip>
+                    <Button
                       component={Link}
-                      to={`/evolucoes/nova?paciente=${p.id}`}
-                      color="primary"
+                      to={`/evolucoes?paciente=${p.id}`}
                       size="small"
+                      startIcon={<Description />}
+                      color="inherit"
                     >
-                      <AddCircle />
-                    </IconButton>
-                  </Tooltip>
-                  <Button
-                    component={Link}
-                    to={`/evolucoes?paciente=${p.id}`}
-                    size="small"
-                    startIcon={<Description />}
-                    color="inherit"
-                  >
-                    Evoluções
-                  </Button>
-                  <Button
-                    component={Link}
-                    to={`/resumo?paciente=${p.id}`}
-                    size="small"
-                    startIcon={<BarChart />}
-                    color="inherit"
-                  >
-                    Resumo
-                  </Button>
-                </CardActions>
-              </CardRow>
-            </PacienteCard>
-          );
-        })}
-      </Stack>
+                      Evoluções
+                    </Button>
+                    <Button
+                      component={Link}
+                      to={`/resumo?paciente=${p.id}`}
+                      size="small"
+                      startIcon={<BarChart />}
+                      color="inherit"
+                    >
+                      Resumo
+                    </Button>
+                  </CardActions>
+                </CardRow>
+              </PacienteCard>
+            );
+          })}
+        </Stack>
+      )}
     </Container>
   );
 }

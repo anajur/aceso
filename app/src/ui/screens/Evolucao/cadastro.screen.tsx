@@ -44,7 +44,7 @@ export default function CadastroEvolucao() {
   const pacientePre = searchParams.get("paciente") || "";
   const { usuarioId } = useAuth();
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(true);
   const nowLocal = () => {
     const d = new Date();
     d.setMinutes(d.getMinutes() - d.getTimezoneOffset());

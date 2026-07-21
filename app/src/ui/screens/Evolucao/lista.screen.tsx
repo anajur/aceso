@@ -50,7 +50,7 @@ export default function ListaEvolucoes() {
     }
   };
   const [dataFiltro, setDataFiltro] = useState("");
-
+  const [loading, setLoading] = useState(true);
   const [evolucoes, setEvolucoes] = useState<Evolucao[]>([]);
 
   useEffect(() => {

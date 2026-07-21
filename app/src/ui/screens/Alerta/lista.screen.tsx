@@ -26,6 +26,7 @@ const sevColor: Record<GrauUrgencia, "error" | "warning" | "success"> = {
 
 export default function ListaAlertas() {
   const [alertas, setAlertas] = useState<Alerta[]>([]);
+  const [loading, setLoading] = useState(true);
   async function carregarAlertas() {
     try {
       const { data } = await listarAlertas();

@@ -11,6 +11,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(true);
   const { setUsuarioId } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
