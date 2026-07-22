@@ -99,7 +99,6 @@ public class GeminiService {
         String prompt = montarPrompt(historico);
         System.out.println("Chamando Gemini para paciente: " + idPaciente);
 
-
         String resposta =
                 webClient.post()
                         .uri("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=" + apiKey)

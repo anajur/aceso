@@ -24,12 +24,14 @@ public class AlertaService {
     private final GeminiService geminiService;
     private final EvolucaoRepository evolucaoRepository;
     private final ConcurrentHashMap<Long, Object> locks = new ConcurrentHashMap();
-
-    public AlertaService(PacienteRepository pacienteRepository, AlertaRepository alertaRepository, GeminiService geminiService, EvolucaoRepository evolucaoRepository) {
+    private final AnaliseLocalService analiseLocalService;
+    
+    public AlertaService(PacienteRepository pacienteRepository, AlertaRepository alertaRepository, GeminiService geminiService, EvolucaoRepository evolucaoRepository, AnaliseLocalService analiseLocalService) {
         this.pacienteRepository = pacienteRepository;
         this.alertaRepository = alertaRepository;
         this.geminiService = geminiService;
         this.evolucaoRepository = evolucaoRepository;
+        this.analiseLocalService = analiseLocalService;
     }
 
     public void gerarAlertasDoDia() throws JsonProcessingException {
@@ -74,10 +76,19 @@ public class AlertaService {
 
     private void analisarPaciente(Paciente paciente) throws JsonProcessingException {
 
-        RespostaIa respostaIa =
-                geminiService.gerarAnalise(paciente.getId());
+        try {
 
-        salvarOuAtualizarAlerta(paciente, respostaIa);
+            //   RespostaIa respostaIa =
+            geminiService.gerarAnalise(paciente.getId());
+
+            //    salvarOuAtualizarAlerta(paciente, respostaIa);
+
+        } catch (Exception e) {
+
+            RespostaIa respostaIa = analiseLocalService.gerarAnalise(paciente.getId());
+            salvarOuAtualizarAlerta(paciente, respostaIa);
+
+        }
     }
 
 
