@@ -24,10 +24,11 @@ public class EvolucaoResponse {
     private List<Humor> humores;
     private List<Comportamento> comportamentos;
     private Socializacao socializacao;
-    private NivelConsciencia nivelConsciencia;
     private Sono sono;
     private AceitacaoAlimentar aceitacaoAlimentar;
     private Double temperatura;
     private Integer frequenciaCardiaca;
     private String comentario;
+    private String pressaoArterial;
+    private Integer saturacaoOxigenio;
 }

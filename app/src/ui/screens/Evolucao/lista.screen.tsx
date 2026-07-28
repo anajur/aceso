@@ -11,13 +11,13 @@ import {
   Chip,
   Button,
   Tooltip,
+  Skeleton,
 } from "@mui/material";
 import { AccessTime, Person, AddCircle } from "@mui/icons-material";
 import {
   humorLabels,
   comportamentoLabels,
   socializacaoLabels,
-  nivelConscienciaLabels,
   sonoLabels,
   aceitacaoAlimentarLabels,
 } from "../../../enums/index";
@@ -68,6 +68,8 @@ export default function ListaEvolucoes() {
 
   const carregarEvolucoes = async () => {
     try {
+      setLoading(true);
+
       const { data } = await listarEvolucoes();
       setEvolucoes(data);
       const { data: dataPacientes } = await listarPacientes();
@@ -75,6 +77,8 @@ export default function ListaEvolucoes() {
       setPacientes(dataPacientes);
     } catch (error) {
       console.error("Erro ao carregar evoluções:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -138,111 +142,148 @@ export default function ListaEvolucoes() {
       </Stack>
 
       <Stack spacing={1.5}>
-        {filtradas.map((e) => (
-          <Card key={e.id} sx={{ p: 2.5 }}>
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              justifyContent="space-between"
-              alignItems={{ sm: "center" }}
-              mb={1.5}
-              gap={1}
-            >
-              <Stack direction="row" alignItems="center" spacing={1.5}>
-                <Avatar
-                  sx={{
-                    width: 32,
-                    height: 32,
-                    bgcolor: "secondary.light",
-                    color: "secondary.dark",
-                    fontSize: 12,
-                    fontWeight: 600,
-                  }}
+        {loading
+          ? [...Array(4)].map((_, index) => (
+              <Card key={index} sx={{ p: 2.5 }}>
+                <Stack spacing={2}>
+                  <Stack direction="row" spacing={2} alignItems="center">
+                    <Skeleton variant="circular" width={32} height={32} />
+                    <Skeleton variant="text" width={180} height={28} />
+                  </Stack>
+
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="90%" />
+                  <Skeleton variant="text" width="75%" />
+
+                  <Stack direction="row" spacing={1}>
+                    <Skeleton variant="rounded" width={80} height={28} />
+                    <Skeleton variant="rounded" width={90} height={28} />
+                    <Skeleton variant="rounded" width={70} height={28} />
+                  </Stack>
+
+                  <Skeleton variant="text" width="95%" />
+                  <Skeleton variant="text" width="80%" />
+                </Stack>
+              </Card>
+            ))
+          : filtradas.map((e) => (
+              <Card key={e.id} sx={{ p: 2.5 }}>
+                <Stack
+                  direction={{ xs: "column", sm: "row" }}
+                  justifyContent="space-between"
+                  alignItems={{ sm: "center" }}
+                  mb={1.5}
+                  gap={1}
                 >
-                  {e.pacienteNome
-                    ?.split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </Avatar>
-                <Typography fontWeight={600}>{e.pacienteNome}</Typography>
-              </Stack>
-              <Stack
-                direction="row"
-                spacing={2}
-                sx={{ color: "text.secondary" }}
-              >
-                <Stack direction="row" spacing={0.5} alignItems="center">
-                  <AccessTime sx={{ fontSize: 14 }} />
-                  <Typography variant="caption">
-                    {new Date(e.dataHora).toLocaleString("pt-BR")}
-                  </Typography>
+                  <Stack direction="row" alignItems="center" spacing={1.5}>
+                    <Avatar
+                      sx={{
+                        width: 32,
+                        height: 32,
+                        bgcolor: "secondary.light",
+                        color: "secondary.dark",
+                        fontSize: 12,
+                        fontWeight: 600,
+                      }}
+                    >
+                      {e.pacienteNome
+                        ?.split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </Avatar>
+                    <Typography fontWeight={600}>{e.pacienteNome}</Typography>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    sx={{ color: "text.secondary" }}
+                  >
+                    <Stack direction="row" spacing={0.5} alignItems="center">
+                      <AccessTime sx={{ fontSize: 14 }} />
+                      <Typography variant="caption">
+                        {new Date(e.dataHora).toLocaleString("pt-BR")}
+                      </Typography>
+                    </Stack>
+                    <Stack direction="row" spacing={0.5} alignItems="center">
+                      <Person sx={{ fontSize: 14 }} />
+                      <Typography variant="caption">{e.usuarioNome}</Typography>
+                    </Stack>
+                  </Stack>
                 </Stack>
-                <Stack direction="row" spacing={0.5} alignItems="center">
-                  <Person sx={{ fontSize: 14 }} />
-                  <Typography variant="caption">{e.usuarioNome}</Typography>
+
+                <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
+                  {e.comentario}
+                </Typography>
+
+                <Stack spacing={2}>
+                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                    {e.humores.map((humor) => (
+                      <Chip
+                        key={humor}
+                        label={humorLabels[humor]}
+                        color={humorColor[humor]}
+                        size="small"
+                        variant="outlined"
+                      />
+                    ))}
+
+                    {e.comportamentos.map((comportamento) => (
+                      <Chip
+                        key={comportamento}
+                        label={comportamentoLabels[comportamento]}
+                        size="small"
+                      />
+                    ))}
+                  </Stack>
+
+                  <Stack
+                    direction={{ xs: "column", md: "row" }}
+                    spacing={4}
+                    flexWrap="wrap"
+                    useFlexGap
+                  >
+                    {e.socializacao && (
+                      <Typography variant="body2">
+                        <strong>Socialização:</strong>{" "}
+                        {socializacaoLabels[e.socializacao]}
+                      </Typography>
+                    )}
+                    {e.sono && (
+                      <Typography variant="body2">
+                        <strong>Sono:</strong> {sonoLabels[e.sono]}
+                      </Typography>
+                    )}
+
+                    {e.aceitacaoAlimentar && (
+                      <Typography variant="body2">
+                        <strong>Alimentação:</strong>{" "}
+                        {aceitacaoAlimentarLabels[e.aceitacaoAlimentar]}
+                      </Typography>
+                    )}
+                    {e.pressaoArterial && (
+                      <Typography variant="body2">
+                        <strong>PA:</strong> {e.pressaoArterial}
+                      </Typography>
+                    )}
+                    {e.temperatura && (
+                      <Typography variant="body2">
+                        <strong>Temperatura:</strong> {e.temperatura} °C
+                      </Typography>
+                    )}
+                    {e.frequenciaCardiaca && (
+                      <Typography variant="body2">
+                        <strong>FC:</strong> {e.frequenciaCardiaca} bpm
+                      </Typography>
+                    )}
+                    {e.saturacaoOxigenio && (
+                      <Typography variant="body2">
+                        <strong>SpO₂:</strong> {e.saturacaoOxigenio}%
+                      </Typography>
+                    )}
+                  </Stack>
                 </Stack>
-              </Stack>
-            </Stack>
-
-            <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
-              {e.comentario}
-            </Typography>
-
-            <Stack spacing={2}>
-              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                {e.humores.map((humor) => (
-                  <Chip
-                    key={humor}
-                    label={humorLabels[humor]}
-                    color={humorColor[humor]}
-                    size="small"
-                    variant="outlined"
-                  />
-                ))}
-
-                {e.comportamentos.map((comportamento) => (
-                  <Chip
-                    key={comportamento}
-                    label={comportamentoLabels[comportamento]}
-                    size="small"
-                  />
-                ))}
-
-                <Chip
-                  label={nivelConscienciaLabels[e.nivelConsciencia]}
-                  size="small"
-                />
-              </Stack>
-
-              <Stack
-                direction={{ xs: "column", md: "row" }}
-                spacing={4}
-                flexWrap="wrap"
-              >
-                <Typography variant="body2">
-                  <strong>Socialização:</strong>{" "}
-                  {socializacaoLabels[e.socializacao]}
-                </Typography>
-
-                <Typography variant="body2">
-                  <strong>Sono:</strong> {sonoLabels[e.sono]}
-                </Typography>
-
-                <Typography variant="body2">
-                  <strong>Alimentação:</strong>{" "}
-                  {aceitacaoAlimentarLabels[e.aceitacaoAlimentar]}
-                </Typography>
-
-                <Typography variant="body2">
-                  <strong>Temperatura:</strong> {e.temperatura} °C
-                </Typography>
-
-                <Typography variant="body2">
-                  <strong>FC:</strong> {e.frequenciaCardiaca} bpm
-                </Typography>
-              </Stack>
-            </Stack>
-          </Card>
-        ))}
+              </Card>
+            ))}
       </Stack>
     </Box>
   );

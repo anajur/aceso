@@ -5,9 +5,6 @@ public enum Humor {
     TRISTE,
     ANSIOSO,
     IRRITADO,
-    APATICO,
-    EUFORICO,
-    CALMO,
     NEUTRO
 
 }

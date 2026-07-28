@@ -2,18 +2,14 @@ package com.tcc.aceso.api.controller;
 
 import java.util.List;
 
+import com.tcc.aceso.api.controller.request.AtualizarStatusPacienteRequest;
+import com.tcc.aceso.api.controller.request.CadastroPacienteRequest;
 import com.tcc.aceso.api.controller.response.PacienteListaResponse;
+import com.tcc.aceso.api.controller.response.ResumoPacienteResponse;
 import com.tcc.aceso.api.service.PacienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.tcc.aceso.api.domain.Paciente;
 import com.tcc.aceso.api.repository.PacienteRepository;
@@ -43,8 +39,9 @@ public class PacienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Paciente> cadastrar(@RequestBody Paciente paciente) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(pacienteRepository.save(paciente));
+    @ResponseStatus(HttpStatus.CREATED)
+    public void cadastrar(@RequestBody CadastroPacienteRequest request) {
+        pacienteService.cadastrar(request);
     }
 
     @PutMapping("/{id}")
@@ -65,5 +62,19 @@ public class PacienteController {
 
         pacienteRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/resumo")
+    public ResumoPacienteResponse buscarResumo(@PathVariable Long id) {
+        return pacienteService.buscarResumo(id);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Void> atualizarStatus(
+            @PathVariable Long id,
+            @RequestBody AtualizarStatusPacienteRequest request
+    ) {
+        pacienteService.atualizarStatus(id, request.getStatus());
+        return ResponseEntity.ok().build();
     }
 }

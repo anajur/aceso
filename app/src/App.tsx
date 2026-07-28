@@ -16,6 +16,8 @@ import {
   Login,
   ListaAlertas,
   CadastroUsuario,
+  CadastroPaciente,
+  ResumoPaciente,
 } from "./ui/screens/index";
 import { AuthProvider } from "./context/AuthProvider";
 
@@ -76,6 +78,22 @@ const App = () => (
               element={
                 <Layout>
                   <CadastroUsuario />
+                </Layout>
+              }
+            />
+            <Route
+              path="/pacientes/novo"
+              element={
+                <Layout>
+                  <CadastroPaciente />
+                </Layout>
+              }
+            />
+            <Route
+              path="/resumo"
+              element={
+                <Layout>
+                  <ResumoPaciente />
                 </Layout>
               }
             />

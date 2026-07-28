@@ -39,13 +39,6 @@ public class AnaliseLocalService {
                 .anyMatch(e -> e.getSocializacao() == socializacao);
     }
 
-    private boolean possuiNivelConsciencia(List<Evolucao> evolucoes,
-                                           NivelConsciencia nivel) {
-
-        return evolucoes.stream()
-                .anyMatch(e -> e.getNivelConsciencia() == nivel);
-    }
-
 
     RespostaIa gerarAnalise(Long idPaciente) {
 

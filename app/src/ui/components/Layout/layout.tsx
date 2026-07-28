@@ -26,8 +26,8 @@ import {
   Notifications,
   Download,
   Menu as MenuIcon,
-  Favorite,
   Logout,
+  SupervisedUserCircle,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
@@ -40,14 +40,13 @@ const menuItems = [
     icon: <Description />,
     path: "/evolucoes/nova",
   },
-
-  { label: "Pacientes", icon: <People />, path: "/pacientes" },
   { label: "Alertas", icon: <Notifications />, path: "/alertas" },
+  { label: "Pacientes", icon: <People />, path: "/pacientes" },
+  { label: "Cadastrar Paciente", icon: <PersonAdd />, path: "/pacientes/novo" },
+  { label: "Resumo Paciente", icon: <BarChart />, path: "/resumo" },
 
-  // { label: "Cadastrar Paciente", icon: <PersonAdd />, path: "/pacientes/novo" },
   // { label: "Técnicos", icon: <LocalHospital />, path: "/tecnicos" },
   { label: "Cadastrar Usuário", icon: <PersonAdd />, path: "/usuarios/novo" },
-  // { label: "Resumo Paciente", icon: <BarChart />, path: "/resumo" },
   // { label: "Exportar", icon: <Download />, path: "/exportar" },
   // { label: "Perfil ADM", icon: <AdminPanelSettings />, path: "/perfil-adm" },
   // { label: "Perfil Técnico", icon: <LocalHospital />, path: "/perfil-tecnico" },
@@ -78,7 +77,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         }}
       >
         <Avatar sx={{ bgcolor: "primary.main", width: 36, height: 36 }}>
-          <Favorite fontSize="small" />
+          <SupervisedUserCircle fontSize="small" />
         </Avatar>
         <Box>
           <Typography

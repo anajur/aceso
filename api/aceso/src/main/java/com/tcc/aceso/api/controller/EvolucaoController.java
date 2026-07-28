@@ -84,7 +84,6 @@ public class EvolucaoController {
         destino.setHumores(origem.getHumores());
         destino.setComportamentos(origem.getComportamentos());
         destino.setSocializacao(origem.getSocializacao());
-        destino.setNivelConsciencia(origem.getNivelConsciencia());
         destino.setSono(origem.getSono());
         destino.setAceitacaoAlimentar(origem.getAceitacaoAlimentar());
         destino.setTemperatura(origem.getTemperatura());

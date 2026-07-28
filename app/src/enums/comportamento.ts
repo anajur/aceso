@@ -3,7 +3,6 @@ export enum Comportamento {
   AGITADO = "AGITADO",
   AGRESSIVO = "AGRESSIVO",
   COLABORATIVO = "COLABORATIVO",
-  RESISTENTE = "RESISTENTE",
 }
 
 export const comportamentoLabels: Record<Comportamento, string> = {
@@ -11,5 +10,4 @@ export const comportamentoLabels: Record<Comportamento, string> = {
   [Comportamento.AGITADO]: "Agitado",
   [Comportamento.AGRESSIVO]: "Agressivo",
   [Comportamento.COLABORATIVO]: "Colaborativo",
-  [Comportamento.RESISTENTE]: "Resistente",
 };

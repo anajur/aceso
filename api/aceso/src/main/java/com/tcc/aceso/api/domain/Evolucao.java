@@ -58,12 +58,13 @@ public class Evolucao {
     private Socializacao socializacao;
 
     @Enumerated(EnumType.STRING)
-    private NivelConsciencia nivelConsciencia;
-
-    @Enumerated(EnumType.STRING)
     private Sono sono;
 
     @Enumerated(EnumType.STRING)
     private AceitacaoAlimentar aceitacaoAlimentar;
     private LocalDateTime dataHora = LocalDateTime.now();
+
+    private String pressaoArterial;
+
+    private Integer saturacaoOxigenio;
 }

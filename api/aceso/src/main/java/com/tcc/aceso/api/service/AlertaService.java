@@ -6,6 +6,7 @@ import com.tcc.aceso.api.domain.Evolucao;
 import com.tcc.aceso.api.domain.Paciente;
 import com.tcc.aceso.api.domain.RespostaIa;
 import com.tcc.aceso.api.enums.StatusAlerta;
+import com.tcc.aceso.api.enums.StatusPaciente;
 import com.tcc.aceso.api.repository.AlertaRepository;
 import com.tcc.aceso.api.repository.EvolucaoRepository;
 import com.tcc.aceso.api.repository.PacienteRepository;
@@ -36,7 +37,8 @@ public class AlertaService {
 
     public void gerarAlertasDoDia() throws JsonProcessingException {
 
-        List<Paciente> pacientes = pacienteRepository.findAll();
+        List<Paciente> pacientes =
+                pacienteRepository.findByStatusOrderByNome(StatusPaciente.ATIVO);
 
         for (Paciente paciente : pacientes) {
 
@@ -78,19 +80,17 @@ public class AlertaService {
 
         try {
 
-            //   RespostaIa respostaIa =
-            geminiService.gerarAnalise(paciente.getId());
+          //     RespostaIa respostaIa =
+          //  geminiService.gerarAnalise(paciente.getId());
 
-            //    salvarOuAtualizarAlerta(paciente, respostaIa);
+          //      salvarOuAtualizarAlerta(paciente, respostaIa);
 
         } catch (Exception e) {
-
             RespostaIa respostaIa = analiseLocalService.gerarAnalise(paciente.getId());
             salvarOuAtualizarAlerta(paciente, respostaIa);
 
         }
     }
-
 
     private void salvarOuAtualizarAlerta(Paciente paciente,
                                          RespostaIa resposta) {

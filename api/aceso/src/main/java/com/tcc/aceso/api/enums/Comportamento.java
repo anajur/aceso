@@ -5,7 +5,4 @@ public enum Comportamento {
     AGITADO,
     AGRESSIVO,
     COLABORATIVO,
-    COMUNICATIVO,
-    ISOLADO,
-    DESORGANIZADO
 }

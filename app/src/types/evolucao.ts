@@ -2,7 +2,6 @@ import {
   AceitacaoAlimentar,
   Comportamento,
   Humor,
-  NivelConsciencia,
   Socializacao,
   Sono,
 } from "../enums";
@@ -16,13 +15,14 @@ export interface Evolucao {
   humores: Humor[];
   comportamentos: Comportamento[];
   socializacao: Socializacao;
-  nivelConsciencia: NivelConsciencia;
   sono: Sono;
   aceitacaoAlimentar: AceitacaoAlimentar;
   temperatura: number;
   frequenciaCardiaca: number;
   tecnicoId: number;
   usuarioNome: string;
+  pressaoArterial: string;
+  saturacaoOxigenio: string;
 }
 
 export interface EvolucaoForm {
@@ -33,8 +33,9 @@ export interface EvolucaoForm {
   humores: Humor[];
   comportamentos: Comportamento[];
   socializacao: Socializacao;
-  nivelConsciencia?: NivelConsciencia;
   sono: Sono;
+  pressaoArterial?: string;
+  saturacaoOxigenio: string;
   aceitacaoAlimentar: AceitacaoAlimentar;
   temperatura?: number;
   frequenciaCardiaca?: number;

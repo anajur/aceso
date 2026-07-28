@@ -29,4 +29,10 @@ public interface EvolucaoRepository extends JpaRepository<Evolucao, Long> {
                 data.plusDays(1).atStartOfDay()
         );
     }
-}
+
+    List<Evolucao> findAllByOrderByDataHoraDesc();
+
+    List<Evolucao> findByPacienteIdAndDataHoraGreaterThanEqualOrderByDataHoraAsc(
+            Long pacienteId,
+            LocalDateTime data
+    );}

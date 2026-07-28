@@ -2,7 +2,6 @@ import {
   AceitacaoAlimentar,
   Comportamento,
   Humor,
-  NivelConsciencia,
   Socializacao,
   Sono,
 } from "../enums";
@@ -32,7 +31,6 @@ export interface Evolucao {
   humores: Humor[];
   comportamentos: Comportamento[];
   socializacao: Socializacao;
-  nivelConsciencia: NivelConsciencia;
   sono: Sono;
   aceitacaoAlimentar: AceitacaoAlimentar;
   temperatura: number;

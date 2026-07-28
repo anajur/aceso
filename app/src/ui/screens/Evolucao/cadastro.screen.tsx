@@ -27,7 +27,6 @@ import {
   comportamentoLabels,
   Humor,
   humorLabels,
-  nivelConscienciaLabels,
   socializacaoLabels,
   sonoLabels,
 } from "../../../enums";
@@ -55,7 +54,14 @@ export default function CadastroEvolucao() {
     try {
       console.log("x", usuarioId);
       if (!usuarioId) return;
-      await salvarEvolucao({ ...data, usuarioId: usuarioId });
+      await salvarEvolucao({
+        ...data,
+        socializacao: data.socializacao || undefined,
+        sono: data.sono || undefined,
+        aceitacaoAlimentar: data.aceitacaoAlimentar || undefined,
+        pressaoArterial: data.pressaoArterial || undefined,
+        usuarioId: usuarioId,
+      });
 
       toast.success("Evolução registrada com sucesso!");
 
@@ -80,7 +86,8 @@ export default function CadastroEvolucao() {
       humores: [],
       comportamentos: [],
       socializacao: undefined,
-      nivelConsciencia: undefined,
+      pressaoArterial: undefined,
+      saturacaoOxigenio: undefined,
       sono: undefined,
       aceitacaoAlimentar: undefined,
       temperatura: undefined,
@@ -91,7 +98,14 @@ export default function CadastroEvolucao() {
   async function onSubmitAndClear(data: EvolucaoForm) {
     try {
       if (!usuarioId) return;
-      await salvarEvolucao({ ...data, usuarioId: usuarioId });
+      await salvarEvolucao({
+        ...data,
+        socializacao: data.socializacao || undefined,
+        sono: data.sono || undefined,
+        aceitacaoAlimentar: data.aceitacaoAlimentar || undefined,
+        pressaoArterial: data.pressaoArterial || undefined,
+        usuarioId: usuarioId,
+      });
 
       toast.success("Evolução registrada com sucesso!");
 
@@ -102,7 +116,8 @@ export default function CadastroEvolucao() {
         humores: [],
         comportamentos: [],
         socializacao: undefined,
-        nivelConsciencia: undefined,
+        pressaoArterial: undefined,
+        saturacaoOxigenio: undefined,
         sono: undefined,
         aceitacaoAlimentar: undefined,
         temperatura: undefined,
@@ -203,11 +218,10 @@ export default function CadastroEvolucao() {
           <Divider style={{ margin: "24px 0" }} />
           <SectionLabel>Avaliação Psicossocial</SectionLabel>
           <Grid container spacing={2}>
-            <Grid item xs={3} md={6}>
+            <Grid item xs={6} md={6}>
               <TextField
                 label="Socialização"
                 select
-                defaultValue=""
                 fullWidth
                 {...register("socializacao")}
               >
@@ -318,22 +332,6 @@ export default function CadastroEvolucao() {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={4}>
               <TextField
-                label="Nível de Consciência"
-                select
-                defaultValue=""
-                fullWidth
-                {...register("nivelConsciencia")}
-              >
-                <MenuItem value="">—</MenuItem>
-                {Object.entries(nivelConscienciaLabels).map(([k, l]) => (
-                  <MenuItem key={k} value={k}>
-                    {l}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
                 label="Sono"
                 select
                 defaultValue=""
@@ -364,7 +362,15 @@ export default function CadastroEvolucao() {
                 ))}
               </TextField>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                label="Pressão Arterial (PA)"
+                placeholder="Ex: 120/80"
+                fullWidth
+                {...register("pressaoArterial")}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
               <TextField
                 label="Temperatura"
                 type="number"
@@ -374,12 +380,25 @@ export default function CadastroEvolucao() {
                 })}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 label="Frequência Cardíaca"
                 type="number"
                 fullWidth
                 {...register("frequenciaCardiaca", {
+                  valueAsNumber: true,
+                })}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                label="Saturação de Oxigênio (SpO₂)"
+                type="number"
+                inputProps={{
+                  min: 0,
+                }}
+                fullWidth
+                {...register("saturacaoOxigenio", {
                   valueAsNumber: true,
                 })}
               />

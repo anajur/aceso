@@ -28,6 +28,7 @@ export default function CadastroUsuario() {
   const { register, handleSubmit, watch } = useForm<UsuarioForm>();
   const senha = watch("senha");
   const confirmar = watch("confirmarSenha");
+  const [loading, setLoading] = useState(true);
   const onSubmit = async (data: UsuarioForm) => {
     if (data.senha.length < 6) {
       toast.error("A senha deve ter ao menos 6 caracteres.");

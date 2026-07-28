@@ -52,10 +52,6 @@ public class GeminiService {
                     .append(e.getComportamentos())
                     .append("\n");
 
-            sb.append("Consciencia: ")
-                    .append(e.getNivelConsciencia())
-                    .append("\n");
-
             sb.append("Socialização: ")
                     .append(e.getSocializacao())
                     .append("\n");

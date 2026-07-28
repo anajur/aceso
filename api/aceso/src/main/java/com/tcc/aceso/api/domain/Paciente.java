@@ -1,15 +1,8 @@
 package com.tcc.aceso.api.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.tcc.aceso.api.enums.StatusPaciente;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -24,4 +17,14 @@ public class Paciente {
 
     @Column(nullable = false)
     private String nome;
+
+    @Column(name = "remedios_uso_continuo", columnDefinition = "TEXT")
+    private String remediosUsoContinuo;
+
+    @Column(name = "pontos_atencao", columnDefinition = "TEXT")
+    private String pontosAtencao;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StatusPaciente status = StatusPaciente.ATIVO;
 }

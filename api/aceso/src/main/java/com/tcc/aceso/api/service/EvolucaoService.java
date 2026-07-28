@@ -26,7 +26,7 @@ public class EvolucaoService {
     }
 
     public List<EvolucaoResponse> listar() {
-        return evolucaoRepository.findAll()
+        return evolucaoRepository.findAllByOrderByDataHoraDesc()
                 .stream()
                 .map(EvolucaoMapper::toResponse)
                 .toList();
@@ -49,11 +49,12 @@ public class EvolucaoService {
         evolucao.setHumores(request.getHumores());
         evolucao.setComportamentos(request.getComportamentos());
         evolucao.setSocializacao(request.getSocializacao());
-        evolucao.setNivelConsciencia(request.getNivelConsciencia());
         evolucao.setSono(request.getSono());
         evolucao.setAceitacaoAlimentar(request.getAceitacaoAlimentar());
         evolucao.setTemperatura(request.getTemperatura());
         evolucao.setFrequenciaCardiaca(request.getFrequenciaCardiaca());
+        evolucao.setPressaoArterial(request.getPressaoArterial());
+        evolucao.setSaturacaoOxigenio(request.getSaturacaoOxigenio());
 
         evolucaoRepository.save(evolucao);
 

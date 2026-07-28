@@ -9,6 +9,7 @@ import {
   Tooltip,
   CircularProgress,
   Box,
+  MenuItem,
 } from "@mui/material";
 import {
   Search,
@@ -35,10 +36,12 @@ import { toast } from "sonner";
 
 export default function ListaPacientes() {
   const [busca, setBusca] = useState("");
+  const [status, setStatus] = useState("ATIVO");
   const [pacientes, setPacientes] = useState<Paciente[]>([]);
   const [loading, setLoading] = useState(true);
-  const filtrados = pacientes.filter((p) =>
-    p.nome.toLowerCase().includes(busca.toLowerCase()),
+  const filtrados = pacientes.filter(
+    (p) =>
+      p.nome.toLowerCase().includes(busca.toLowerCase()) && p.status === status,
   );
 
   async function carregarPacientes() {
@@ -88,18 +91,33 @@ export default function ListaPacientes() {
         </Actions>
       </Header>
 
-      <SearchField
-        placeholder="Buscar paciente..."
-        value={busca}
-        onChange={(e) => setBusca(e.target.value)}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Search fontSize="small" />
-            </InputAdornment>
-          ),
-        }}
-      />
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={2}>
+        <SearchField
+          placeholder="Buscar paciente..."
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Search fontSize="small" />
+              </InputAdornment>
+            ),
+          }}
+          sx={{ flex: 1 }}
+        />
+
+        <SearchField
+          select
+          label="Status"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          sx={{ width: 180 }}
+        >
+          <MenuItem value="ATIVO">Ativo</MenuItem>
+          <MenuItem value="ALTA">Alta</MenuItem>
+          <MenuItem value="TRANSFERIDO">Transferido</MenuItem>
+        </SearchField>
+      </Stack>
       {loading ? (
         <Box display="flex" justifyContent="center" py={6}>
           <CircularProgress />

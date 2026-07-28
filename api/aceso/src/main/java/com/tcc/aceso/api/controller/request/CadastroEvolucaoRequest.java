@@ -17,8 +17,6 @@ public class CadastroEvolucaoRequest {
 
     private Socializacao socializacao;
 
-    private NivelConsciencia nivelConsciencia;
-
     private Sono sono;
 
     private AceitacaoAlimentar aceitacaoAlimentar;
@@ -28,4 +26,7 @@ public class CadastroEvolucaoRequest {
     private Integer frequenciaCardiaca;
 
     private Long usuarioId;
+    private String pressaoArterial;
+
+    private Integer saturacaoOxigenio;
 }
