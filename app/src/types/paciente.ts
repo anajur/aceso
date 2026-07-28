@@ -4,6 +4,7 @@ export interface Paciente {
   nome: string;
   id: number;
   possuiEvolucaoHoje: boolean;
+  status: StatusPaciente;
 }
 
 export interface PacienteForm {

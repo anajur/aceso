@@ -50,28 +50,6 @@ export default function CadastroEvolucao() {
     return d.toISOString().slice(0, 16);
   };
 
-  const onSubmit = async (data: EvolucaoForm) => {
-    try {
-      console.log("x", usuarioId);
-      if (!usuarioId) return;
-      await salvarEvolucao({
-        ...data,
-        socializacao: data.socializacao || undefined,
-        sono: data.sono || undefined,
-        aceitacaoAlimentar: data.aceitacaoAlimentar || undefined,
-        pressaoArterial: data.pressaoArterial || undefined,
-        usuarioId: usuarioId,
-      });
-
-      toast.success("Evolução registrada com sucesso!");
-
-      navigate("/evolucoes");
-    } catch (error) {
-      toast.error("Erro ao registrar evolução.");
-      console.error(error);
-    }
-  };
-
   const {
     control,
     register,
@@ -95,16 +73,17 @@ export default function CadastroEvolucao() {
     },
   });
 
-  async function onSubmitAndClear(data: EvolucaoForm) {
+  async function onSubmit(data: EvolucaoForm) {
     try {
-      if (!usuarioId) return;
+      // if (!usuarioId) return;
       await salvarEvolucao({
         ...data,
         socializacao: data.socializacao || undefined,
         sono: data.sono || undefined,
         aceitacaoAlimentar: data.aceitacaoAlimentar || undefined,
         pressaoArterial: data.pressaoArterial || undefined,
-        usuarioId: usuarioId,
+        usuarioId: 1,
+        // usuarioId: usuarioId,
       });
 
       toast.success("Evolução registrada com sucesso!");
@@ -203,14 +182,19 @@ export default function CadastroEvolucao() {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField
-                label="Descrição da Evolução"
-                multiline
-                rows={4}
-                fullWidth
-                {...register("comentario", {
-                  required: "Informe a evolução.",
-                })}
+              <Controller
+                name="comentario"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    label="Descrição da Evolução"
+                    multiline
+                    rows={4}
+                    fullWidth
+                    {...field}
+                    value={field.value ?? ""}
+                  />
+                )}
               />
             </Grid>
           </Grid>
@@ -219,19 +203,26 @@ export default function CadastroEvolucao() {
           <SectionLabel>Avaliação Psicossocial</SectionLabel>
           <Grid container spacing={2}>
             <Grid item xs={6} md={6}>
-              <TextField
-                label="Socialização"
-                select
-                fullWidth
-                {...register("socializacao")}
-              >
-                <MenuItem value="">—</MenuItem>
-                {Object.entries(socializacaoLabels).map(([k, l]) => (
-                  <MenuItem key={k} value={k}>
-                    {l}
-                  </MenuItem>
-                ))}
-              </TextField>
+              <Controller
+                name="socializacao"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    label="Socialização"
+                    select
+                    fullWidth
+                    {...field}
+                    value={field.value ?? ""}
+                  >
+                    <MenuItem value="">—</MenuItem>
+                    {Object.entries(socializacaoLabels).map(([k, l]) => (
+                      <MenuItem key={k} value={k}>
+                        {l}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
             </Grid>
             <Grid item xs={12} md={6}>
               <Controller
@@ -331,91 +322,138 @@ export default function CadastroEvolucao() {
           <SectionLabel>Avaliação Clínica</SectionLabel>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={4}>
-              <TextField
-                label="Sono"
-                select
-                defaultValue=""
-                fullWidth
-                {...register("sono")}
-              >
-                <MenuItem value="">—</MenuItem>
-                {Object.entries(sonoLabels).map(([k, l]) => (
-                  <MenuItem key={k} value={k}>
-                    {l}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Aceitação Alimentar"
-                {...register("aceitacaoAlimentar")}
-                select
-                defaultValue=""
-                fullWidth
-              >
-                <MenuItem value="">—</MenuItem>
-                {Object.entries(aceitacaoAlimentarLabels).map(([k, l]) => (
-                  <MenuItem key={k} value={k}>
-                    {l}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Pressão Arterial (PA)"
-                placeholder="Ex: 120/80"
-                fullWidth
-                {...register("pressaoArterial")}
+              <Controller
+                name="sono"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    label="Sono"
+                    select
+                    defaultValue=""
+                    fullWidth
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                  >
+                    <MenuItem value="">—</MenuItem>
+                    {Object.entries(sonoLabels).map(([k, l]) => (
+                      <MenuItem key={k} value={k}>
+                        {l}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <TextField
-                label="Temperatura"
-                type="number"
-                fullWidth
-                {...register("temperatura", {
-                  valueAsNumber: true,
-                })}
+              <Controller
+                name="aceitacaoAlimentar"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    label="Aceitação Alimentar"
+                    select
+                    defaultValue=""
+                    fullWidth
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                  >
+                    <MenuItem value="">—</MenuItem>
+                    {Object.entries(aceitacaoAlimentarLabels).map(([k, l]) => (
+                      <MenuItem key={k} value={k}>
+                        {l}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <TextField
-                label="Frequência Cardíaca"
-                type="number"
-                fullWidth
-                {...register("frequenciaCardiaca", {
-                  valueAsNumber: true,
-                })}
+              <Controller
+                name="pressaoArterial"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    value={field.value ?? ""}
+                    label="Pressão Arterial (PA)"
+                    placeholder="Ex: 120/80"
+                    fullWidth
+                    {...register("pressaoArterial")}
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <TextField
-                label="Saturação de Oxigênio (SpO₂)"
-                type="number"
-                inputProps={{
-                  min: 0,
-                }}
-                fullWidth
-                {...register("saturacaoOxigenio", {
-                  valueAsNumber: true,
-                })}
+              <Controller
+                name="temperatura"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    label="Temperatura"
+                    type="number"
+                    fullWidth
+                    value={field.value ?? ""}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === ""
+                          ? undefined
+                          : Number(e.target.value),
+                      )
+                    }
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Controller
+                name="frequenciaCardiaca"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    label="Frequência Cardíaca"
+                    type="number"
+                    fullWidth
+                    value={field.value ?? ""}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === ""
+                          ? undefined
+                          : Number(e.target.value),
+                      )
+                    }
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Controller
+                name="saturacaoOxigenio"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    label="Saturação de Oxigênio (SpO₂)"
+                    type="number"
+                    inputProps={{
+                      min: 0,
+                    }}
+                    fullWidth
+                    value={field.value ?? ""}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === ""
+                          ? undefined
+                          : Number(e.target.value),
+                      )
+                    }
+                  />
+                )}
               />
             </Grid>
           </Grid>
 
           <ButtonRow>
-            <Button
-              type="button"
-              variant="contained"
-              color="secondary"
-              onClick={handleSubmit(onSubmitAndClear)}
-            >
+            <Button type="submit" variant="contained" color="primary">
               Salvar
-            </Button>
-            <Button type="submit" variant="contained">
-              Salvar e Voltar
             </Button>
           </ButtonRow>
         </form>

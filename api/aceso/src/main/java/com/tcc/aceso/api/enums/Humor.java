@@ -6,5 +6,4 @@ public enum Humor {
     ANSIOSO,
     IRRITADO,
     NEUTRO
-
 }

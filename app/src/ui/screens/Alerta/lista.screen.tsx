@@ -7,6 +7,7 @@ import {
   Chip,
   Button,
   Avatar,
+  CircularProgress,
 } from "@mui/material";
 import { Warning, CheckCircle, LightbulbOutlined } from "@mui/icons-material";
 import {
@@ -27,20 +28,21 @@ const sevColor: Record<GrauUrgencia, "error" | "warning" | "success"> = {
 export default function ListaAlertas() {
   const [alertas, setAlertas] = useState<Alerta[]>([]);
   const [loading, setLoading] = useState(true);
+
   async function carregarAlertas() {
     try {
+      setLoading(true);
+
+      await atualizarAlertas();
+
       const { data } = await listarAlertas();
 
       setAlertas(data);
-      try {
-        await atualizarAlertas();
-      } catch (error) {
-        console.error("Erro ao atualizar alertas:", error);
-        toast.warning("Não foi possível atualizar os alertas.");
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+      console.error(error);
       toast.error("Erro ao carregar alertas.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -69,6 +71,19 @@ export default function ListaAlertas() {
       hour: "2-digit",
       minute: "2-digit",
     });
+  }
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight={300}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
   return (
     <Box sx={{ maxWidth: 1000, mx: "auto" }}>

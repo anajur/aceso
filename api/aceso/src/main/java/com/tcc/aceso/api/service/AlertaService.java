@@ -5,14 +5,15 @@ import com.tcc.aceso.api.domain.Alerta;
 import com.tcc.aceso.api.domain.Evolucao;
 import com.tcc.aceso.api.domain.Paciente;
 import com.tcc.aceso.api.domain.RespostaIa;
+import com.tcc.aceso.api.enums.GrauUrgencia;
 import com.tcc.aceso.api.enums.StatusAlerta;
 import com.tcc.aceso.api.enums.StatusPaciente;
 import com.tcc.aceso.api.repository.AlertaRepository;
 import com.tcc.aceso.api.repository.EvolucaoRepository;
 import com.tcc.aceso.api.repository.PacienteRepository;
+import com.tcc.aceso.api.service.analise.AnaliseLocalService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -80,15 +81,14 @@ public class AlertaService {
 
         try {
 
-          //     RespostaIa respostaIa =
-          //  geminiService.gerarAnalise(paciente.getId());
+               RespostaIa respostaIa =
+          geminiService.gerarAnalise(paciente.getId());
 
-          //      salvarOuAtualizarAlerta(paciente, respostaIa);
+                salvarOuAtualizarAlerta(paciente, respostaIa);
 
         } catch (Exception e) {
             RespostaIa respostaIa = analiseLocalService.gerarAnalise(paciente.getId());
             salvarOuAtualizarAlerta(paciente, respostaIa);
-
         }
     }
 

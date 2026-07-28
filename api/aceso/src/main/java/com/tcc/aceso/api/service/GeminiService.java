@@ -74,12 +74,13 @@ public class GeminiService {
 
     private String montarPrompt(String historico) {
         return """
-                Você é um assistente de apoio ao acompanhamento de pacientes psiquiátricos.
-                   Analise as informações fornecidas.
-                
+               Você é assistente no acompanhamento de pacientes de Residência Terapêutica. 
+                   Analise apenas o histórico informado.                
                    Não faça diagnóstico.
                    Não invente informações.
                    Seja objetivo.
+                   Quando pertinente, na sugestão, sugira atividades disponíveis na residência: caminhada, atividade física, horta, pintura, desenho, jogos, música, dança, passeio.
+               
                     Retorne:
                 Resumo: máximo 20 palavras.
                 Sugestão: máximo 15 palavras.
@@ -97,7 +98,7 @@ public class GeminiService {
 
         String resposta =
                 webClient.post()
-                        .uri("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=" + apiKey)
+                        .uri("https://generativelanguage2.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=" + apiKey)
 
                         .contentType(MediaType.APPLICATION_JSON)
 

@@ -54,8 +54,9 @@ public class PacienteService {
                     return new PacienteListaResponse(
                             paciente.getId(),
                             paciente.getNome(),
-                            possuiEvolucaoHoje
-                    );
+                            possuiEvolucaoHoje,
+                            paciente.getStatus()
+                            );
                 })
                 .toList();
     }
