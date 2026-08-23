@@ -98,7 +98,7 @@ public class GeminiService {
 
         String resposta =
                 webClient.post()
-                        .uri("https://generativelanguage2.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=" + apiKey)
+                        .uri("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=" + apiKey)
 
                         .contentType(MediaType.APPLICATION_JSON)
 
