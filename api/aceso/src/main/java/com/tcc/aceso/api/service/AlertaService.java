@@ -27,7 +27,7 @@ public class AlertaService {
     private final EvolucaoRepository evolucaoRepository;
     private final ConcurrentHashMap<Long, Object> locks = new ConcurrentHashMap();
     private final AnaliseLocalService analiseLocalService;
-    
+
     public AlertaService(PacienteRepository pacienteRepository, AlertaRepository alertaRepository, GeminiService geminiService, EvolucaoRepository evolucaoRepository, AnaliseLocalService analiseLocalService) {
         this.pacienteRepository = pacienteRepository;
         this.alertaRepository = alertaRepository;
@@ -78,17 +78,23 @@ public class AlertaService {
     }
 
     private void analisarPaciente(Paciente paciente) throws JsonProcessingException {
+        List<Evolucao> evolucoes =
+                evolucaoRepository.findTop2ByPacienteIdOrderByDataHoraDesc(
+                        paciente.getId()
+                );
 
-        try {
+        if (evolucoes.size() >= 2) {
+            try {
 
-               RespostaIa respostaIa =
-          geminiService.gerarAnalise(paciente.getId());
+                RespostaIa respostaIa =
+                        geminiService.gerarAnalise(paciente.getId());
 
                 salvarOuAtualizarAlerta(paciente, respostaIa);
 
-        } catch (Exception e) {
-            RespostaIa respostaIa = analiseLocalService.gerarAnalise(paciente.getId());
-            salvarOuAtualizarAlerta(paciente, respostaIa);
+            } catch (Exception e) {
+                RespostaIa respostaIa = analiseLocalService.gerarAnalise(paciente.getId());
+                salvarOuAtualizarAlerta(paciente, respostaIa);
+            }
         }
     }
 
@@ -118,4 +124,5 @@ public class AlertaService {
         alerta.setStatus(StatusAlerta.LIDO);
         alertaRepository.save(alerta);
     }
+
 }

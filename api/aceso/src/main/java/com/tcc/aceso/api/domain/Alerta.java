@@ -36,7 +36,7 @@ public class Alerta {
     @Column(name = "data_alerta", nullable = false)
     private LocalDateTime dataAlerta;
 
-    @Column(name = "ultima_analise_ia", nullable = false)
+    @Column(name = "ultima_analise_ia")
     private LocalDateTime ultimaAnaliseIa;
 
     @Enumerated(EnumType.STRING)

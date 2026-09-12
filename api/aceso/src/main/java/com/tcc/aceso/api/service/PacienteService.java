@@ -5,11 +5,13 @@ import com.tcc.aceso.api.controller.response.GraficoComportamentoResponse;
 import com.tcc.aceso.api.controller.response.GraficoHumorResponse;
 import com.tcc.aceso.api.controller.response.PacienteListaResponse;
 import com.tcc.aceso.api.controller.response.ResumoPacienteResponse;
+import com.tcc.aceso.api.domain.Alerta;
 import com.tcc.aceso.api.domain.Evolucao;
 import com.tcc.aceso.api.domain.Paciente;
 import com.tcc.aceso.api.enums.Comportamento;
 import com.tcc.aceso.api.enums.Humor;
 import com.tcc.aceso.api.enums.StatusPaciente;
+import com.tcc.aceso.api.repository.AlertaRepository;
 import com.tcc.aceso.api.repository.EvolucaoRepository;
 import com.tcc.aceso.api.repository.PacienteRepository;
 import jakarta.transaction.Transactional;
@@ -26,12 +28,14 @@ import java.util.Map;
 public class PacienteService {
     private final PacienteRepository pacienteRepository;
     private final EvolucaoRepository evolucaoRepository;
+private final AlertaRepository alertaRepository;
 
     public PacienteService(
             PacienteRepository pacienteRepository,
-            EvolucaoRepository evolucaoRepository) {
+            EvolucaoRepository evolucaoRepository, AlertaRepository alertaRepository) {
         this.pacienteRepository = pacienteRepository;
         this.evolucaoRepository = evolucaoRepository;
+        this.alertaRepository = alertaRepository;
     }
 
     public List<PacienteListaResponse> listar() {
@@ -88,7 +92,9 @@ public class PacienteService {
                                 pacienteId,
                                 inicio
                         );
-
+        List<Alerta> alertas =
+                alertaRepository
+                        .findTop3ByPacienteIdOrderByDataAlertaDesc(pacienteId);
         return ResumoPacienteResponse.builder()
                 .id(paciente.getId())
                 .nome(paciente.getNome())
@@ -96,6 +102,7 @@ public class PacienteService {
                 .remediosUsoContinuo(paciente.getRemediosUsoContinuo())
                 .pontosAtencao(paciente.getPontosAtencao())
                 .graficoHumor(montarGraficoHumor(evolucoes))
+                .alertas(alertas)
                 .graficoComportamento(montarGraficoComportamento(evolucoes))
                 .build();
     }

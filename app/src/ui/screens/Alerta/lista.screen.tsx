@@ -63,6 +63,7 @@ export default function ListaAlertas() {
   useEffect(() => {
     carregarAlertas();
   }, []);
+
   function formatarData(data: string) {
     return new Date(data).toLocaleString("pt-BR", {
       day: "2-digit",
@@ -85,6 +86,7 @@ export default function ListaAlertas() {
       </Box>
     );
   }
+
   return (
     <Box sx={{ maxWidth: 1000, mx: "auto" }}>
       <Box mb={3}>
@@ -94,107 +96,122 @@ export default function ListaAlertas() {
       </Box>
 
       <Stack spacing={1.5}>
-        {alertas.map((a) => (
-          <Card
-            key={a.id}
-            sx={{
-              p: 2.5,
-              bgcolor:
-                a.status === "LIDO" ? "action.hover" : "background.paper",
-            }}
+        {alertas.length === 0 ? (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight={200}
           >
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              justifyContent="space-between"
-              alignItems={{ sm: "flex-start" }}
-              gap={1.5}
-            >
-              <Stack
-                direction="row"
-                spacing={1.5}
-                alignItems="flex-start"
-                flex={1}
-              >
-                <Avatar
-                  sx={{
-                    width: 36,
-                    height: 36,
-                    bgcolor:
-                      a.grauUrgencia === GrauUrgencia.ALTO
-                        ? "error.light"
-                        : "warning.light",
-                    color:
-                      a.grauUrgencia === GrauUrgencia.ALTO
-                        ? "error.dark"
-                        : "warning.dark",
-                  }}
-                >
-                  <Warning fontSize="small" />
-                </Avatar>
-                <Box flex={1}>
-                  <Stack
-                    direction="row"
-                    spacing={1}
-                    alignItems="center"
-                    mb={0.5}
-                    flexWrap="wrap"
-                  >
-                    <Typography fontWeight={600}>{a.paciente.nome}</Typography>
-                    <Chip
-                      label={grauUrgenciaLabels[a.grauUrgencia]}
-                      color={sevColor[a.grauUrgencia]}
-                      size="small"
-                      variant="outlined"
-                    />
-                  </Stack>
-                  <Typography variant="body2" color="text.secondary">
-                    {a.resumo}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {formatarData(a.dataAlerta)}
-                  </Typography>
-                </Box>
-              </Stack>
-              {a.status === "PENDENTE" && (
-                <Button
-                  size="small"
-                  startIcon={<CheckCircle />}
-                  onClick={() => marcarLido(a.id)}
-                >
-                  Marcar como lido
-                </Button>
-              )}
-            </Stack>
-
-            <Box
+            <Typography color="text.secondary">
+              Nenhum alerta encontrado para os pacientes.
+            </Typography>
+          </Box>
+        ) : (
+          alertas.map((a) => (
+            <Card
+              key={a.id}
               sx={{
-                mt: 2,
-                ml: { sm: 6.5 },
-                p: 1.5,
-                borderRadius: 1.5,
-                bgcolor: "secondary.light",
-                display: "flex",
-                gap: 1,
-                alignItems: "flex-start",
+                p: 2.5,
+                bgcolor:
+                  a.status === "LIDO" ? "action.hover" : "background.paper",
               }}
             >
-              <LightbulbOutlined
-                sx={{ fontSize: 20, color: "secondary.dark", mt: 0.25 }}
-              />
-              <Box>
-                <Typography
-                  variant="caption"
-                  fontWeight={700}
-                  color="secondary.dark"
-                  sx={{ display: "block" }}
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                justifyContent="space-between"
+                alignItems={{ sm: "flex-start" }}
+                gap={1.5}
+              >
+                <Stack
+                  direction="row"
+                  spacing={1.5}
+                  alignItems="flex-start"
+                  flex={1}
                 >
-                  Sugestão
-                </Typography>
-                <Typography variant="body2">{a.sugestao}</Typography>
+                  <Avatar
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      bgcolor:
+                        a.grauUrgencia === GrauUrgencia.ALTO
+                          ? "error.light"
+                          : "warning.light",
+                      color:
+                        a.grauUrgencia === GrauUrgencia.ALTO
+                          ? "error.dark"
+                          : "warning.dark",
+                    }}
+                  >
+                    <Warning fontSize="small" />
+                  </Avatar>
+                  <Box flex={1}>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      alignItems="center"
+                      mb={0.5}
+                      flexWrap="wrap"
+                    >
+                      <Typography fontWeight={600}>
+                        {a.paciente.nome}
+                      </Typography>
+                      <Chip
+                        label={grauUrgenciaLabels[a.grauUrgencia]}
+                        color={sevColor[a.grauUrgencia]}
+                        size="small"
+                        variant="outlined"
+                      />
+                    </Stack>
+                    <Typography variant="body2" color="text.secondary">
+                      {a.resumo}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {formatarData(a.dataAlerta)}
+                    </Typography>
+                  </Box>
+                </Stack>
+                {a.status === "PENDENTE" && (
+                  <Button
+                    size="small"
+                    startIcon={<CheckCircle />}
+                    onClick={() => marcarLido(a.id)}
+                  >
+                    Marcar como lido
+                  </Button>
+                )}
+              </Stack>
+
+              <Box
+                sx={{
+                  mt: 2,
+                  ml: { sm: 6.5 },
+                  p: 1.5,
+                  borderRadius: 1.5,
+                  bgcolor: "secondary.light",
+                  display: "flex",
+                  gap: 1,
+                  alignItems: "flex-start",
+                }}
+              >
+                <LightbulbOutlined
+                  sx={{ fontSize: 20, color: "secondary.dark", mt: 0.25 }}
+                />
+                <Box>
+                  <Typography
+                    variant="caption"
+                    fontWeight={700}
+                    color="secondary.dark"
+                    sx={{ display: "block" }}
+                  >
+                    Sugestão
+                  </Typography>
+                  <Typography variant="body2">{a.sugestao}</Typography>
+                </Box>
               </Box>
-            </Box>
-          </Card>
-        ))}
+            </Card>
+          ))
+        )}
       </Stack>
     </Box>
   );

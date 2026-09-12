@@ -1,5 +1,6 @@
 package com.tcc.aceso.api.controller.response;
 
+import com.tcc.aceso.api.domain.Alerta;
 import com.tcc.aceso.api.enums.StatusPaciente;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class ResumoPacienteResponse {
 
     private List<GraficoHumorResponse> graficoHumor;
     private List<GraficoComportamentoResponse> graficoComportamento;
+    private List<Alerta> alertas;
 }

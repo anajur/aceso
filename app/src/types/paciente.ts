@@ -1,4 +1,5 @@
 import { StatusPaciente } from "../enums/statusPaciente";
+import { Alerta } from "./alerta";
 
 export interface Paciente {
   nome: string;
@@ -21,6 +22,7 @@ export interface Resumo {
   remediosUsoContinuo?: string;
   graficoHumor: GraficoHumor[];
   graficoComportamento: GraficoComportamento[];
+  alertas: Alerta[];
 }
 
 export interface GraficoHumor {

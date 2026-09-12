@@ -117,7 +117,7 @@ public class MensagensAlerta {
                 new RespostaIa(
                         "Paciente apresenta irritabilidade e agressividade.",
                         GrauUrgencia.ALTO,
-                        "Marcar avaliação imediata. Intensificar observação."
+                        "Marcar avaliação. Intensificar observação."
                 );
 
         public static final RespostaIa TRISTE_RECUSA_ALIMENTAR =

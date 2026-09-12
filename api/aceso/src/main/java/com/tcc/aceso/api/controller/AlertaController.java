@@ -51,7 +51,7 @@ public class AlertaController {
 
     @GetMapping("/alertas")
     public List<Alerta> listar() {
-        return alertaRepository.findAllByOrderByStatusDescDataAlertaDesc();
+        return alertaRepository.findAllOrdenadosPorUrgencia();
     }
 
     @GetMapping("/pacientes/{pacienteId}/alertas")
