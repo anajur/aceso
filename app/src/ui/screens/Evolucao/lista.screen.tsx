@@ -60,9 +60,8 @@ export default function ListaEvolucoes() {
   const filtradas = evolucoes?.filter((e) => {
     const pacienteValido = filtro === "all" || e.pacienteId === Number(filtro);
 
-    const dataValida =
-      !dataFiltro ||
-      new Date(e.dataHora).toISOString().split("T")[0] === dataFiltro;
+    const dataValida = !dataFiltro || e.dataHora.split("T")[0] === dataFiltro;
+
     return pacienteValido && dataValida;
   });
 
