@@ -1,5 +1,6 @@
 package com.tcc.aceso.api.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,5 +29,11 @@ public interface AlertaRepository extends JpaRepository<Alerta, Long> {
     List<Alerta> findAllOrdenadosPorUrgencia();
 
     List<Alerta> findTop3ByPacienteIdOrderByDataAlertaDesc(Long pacienteId);
+
+    Optional<Alerta> findByPacienteIdAndDataAlertaBetween(
+            Long pacienteId,
+            LocalDateTime inicio,
+            LocalDateTime fim
+    );
 
 }

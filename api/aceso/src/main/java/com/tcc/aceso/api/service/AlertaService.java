@@ -14,6 +14,7 @@ import com.tcc.aceso.api.repository.PacienteRepository;
 import com.tcc.aceso.api.service.analise.AnaliseLocalService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -58,8 +59,17 @@ public class AlertaService {
 
     private boolean precisaAnalisar(Long pacienteId) {
 
+        LocalDate hoje = LocalDate.now();
+
+        LocalDateTime inicio = hoje.atStartOfDay();
+        LocalDateTime fim = hoje.plusDays(1).atStartOfDay();
+
         Optional<Alerta> alerta =
-                alertaRepository.findByPacienteId(pacienteId);
+                alertaRepository.findByPacienteIdAndDataAlertaBetween(
+                        pacienteId,
+                        inicio,
+                        fim
+                );
 
         if (alerta.isEmpty()) {
             return true;
