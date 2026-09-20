@@ -75,15 +75,14 @@ export default function CadastroEvolucao() {
 
   async function onSubmit(data: EvolucaoForm) {
     try {
-      // if (!usuarioId) return;
+      setLoading(true);
       await salvarEvolucao({
         ...data,
         socializacao: data.socializacao || undefined,
         sono: data.sono || undefined,
         aceitacaoAlimentar: data.aceitacaoAlimentar || undefined,
         pressaoArterial: data.pressaoArterial || undefined,
-        usuarioId: 1,
-        // usuarioId: usuarioId,
+        usuarioId: usuarioId ?? 1,
       });
 
       toast.success("Evolução registrada com sucesso!");
@@ -105,6 +104,7 @@ export default function CadastroEvolucao() {
     } catch (error) {
       toast.error("Erro ao registrar evolução.");
       console.error(error);
+      setLoading(false);
     }
   }
 
@@ -452,7 +452,12 @@ export default function CadastroEvolucao() {
           </Grid>
 
           <ButtonRow>
-            <Button type="submit" variant="contained" color="primary">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              loading={loading}
+            >
               Salvar
             </Button>
           </ButtonRow>

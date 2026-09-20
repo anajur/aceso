@@ -237,7 +237,7 @@ export default function ListaEvolucoes() {
 
                   <Stack
                     direction={{ xs: "column", md: "row" }}
-                    spacing={4}
+                    spacing={2}
                     flexWrap="wrap"
                     useFlexGap
                   >
