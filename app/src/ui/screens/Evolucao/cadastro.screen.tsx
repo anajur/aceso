@@ -104,6 +104,7 @@ export default function CadastroEvolucao() {
     } catch (error) {
       toast.error("Erro ao registrar evolução.");
       console.error(error);
+    } finally {
       setLoading(false);
     }
   }

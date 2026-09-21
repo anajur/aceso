@@ -41,6 +41,7 @@ export default function CadastroUsuario() {
     }
 
     try {
+      setLoading(true);
       await cadastrarUsuario({
         nome: data.nome,
         email: data.email,
@@ -52,6 +53,8 @@ export default function CadastroUsuario() {
       navigate("/");
     } catch {
       toast.error("Erro ao cadastrar usuário.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -130,7 +133,12 @@ export default function CadastroUsuario() {
             <Button variant="outlined" onClick={() => navigate(-1)}>
               Cancelar
             </Button>
-            <Button type="submit" variant="contained" startIcon={<Save />}>
+            <Button
+              type="submit"
+              variant="contained"
+              startIcon={<Save />}
+              loading={loading}
+            >
               Salvar Usuário
             </Button>
           </Stack>

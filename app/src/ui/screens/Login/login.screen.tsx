@@ -23,6 +23,7 @@ export default function Login() {
     }
 
     try {
+      setLoading(true);
       const { data } = await login(email, senha);
 
       setUsuarioId(data.usuarioId);
@@ -31,6 +32,8 @@ export default function Login() {
       navigate("/");
     } catch {
       toast.error("Usuário ou senha inválidos.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,6 +83,7 @@ export default function Login() {
               type="submit"
               variant="contained"
               size="large"
+              loading={loading}
               startIcon={<LoginIcon />}
             >
               Entrar
