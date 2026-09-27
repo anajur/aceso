@@ -211,7 +211,7 @@ export default function ListaEvolucoes() {
                   </Stack>
                 </Stack>
 
-                <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
+                <Typography variant="body2" sx={{ mb: 0.5, lineHeight: 1.6 }}>
                   {e.comentario}
                 </Typography>
 
@@ -238,7 +238,7 @@ export default function ListaEvolucoes() {
 
                   <Stack
                     direction={{ xs: "column", md: "row" }}
-                    spacing={2}
+                    spacing={{ xs: 0.5, md: 2 }}
                     flexWrap="wrap"
                     useFlexGap
                   >
