@@ -132,6 +132,7 @@ export default function ListaEvolucoes() {
             <Button
               variant="contained"
               startIcon={<AddCircle />}
+              disabled={filtro === "all"}
               onClick={handleNovaEvolucao}
             >
               Nova Evolução
