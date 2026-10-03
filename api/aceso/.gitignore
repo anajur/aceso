@@ -24,7 +24,7 @@ out/
 *.ipr
 
 # Configurações de Banco e Propriedades
-src/main/resources/application.properties
+
 *.local
 .env
 .env.*
